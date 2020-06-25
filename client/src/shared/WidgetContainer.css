@@ -1,0 +1,12 @@
+.WidgetContainer-button {
+  min-width: 35px !important;
+
+  padding-left: 5px !important;
+  padding-right: 5px !important;
+}
+
+.WidgetContainer-icon-container {
+  min-width: 24px;
+  text-align: center;
+  display: inline-block;
+}

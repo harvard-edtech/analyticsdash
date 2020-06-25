@@ -1,0 +1,38 @@
+.Header-container {
+  position: fixed;
+  z-index: 100000;
+
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+}
+
+.Header-left-button {
+  font-weight: bold !important;
+  position: fixed;
+  top: 8px;
+  left: 8px;
+}
+
+.Header-right-button {
+  font-weight: bold !important;
+  position: fixed;
+  top: 8px;
+  right: 8px;
+}
+
+.Header-striped-admin-background {
+  background: repeating-linear-gradient(
+    45deg,
+  rgba(240, 173, 78, 1),
+  rgba(240, 173, 78, 1) 14px,
+  rgba(240, 173, 78, 0.95) 14px,
+  rgba(240, 173, 78, 0.95) 28px
+  );
+}
+
+.Header-striped-admin-background h2 {
+  color: black;
+}

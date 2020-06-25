@@ -1,0 +1,44 @@
+{
+	"name": "coursedash",
+	"version": "1.0.0",
+	"description": "Analytics course dashboard for teaching team members.",
+	"main": "index.js",
+	"private": true,
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js",
+		"postinstall": "cd client;npm install",
+		"build": "cd ./client;npm install;npm run build",
+		"dev:canvas": "node ./node_modules/caccl/canvas/startPartialSimulation",
+		"dev:server": "export DEV=true;npm start",
+		"dev:client": "export DEV=true;cd client;npm start"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/harvard-edtech/coursedash.git"
+	},
+	"keywords": [
+		"Analytics",
+		"Canvas",
+		"LMS",
+		"Data",
+		"LTI"
+	],
+	"author": "Gabe Abrams <gabeabrams@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/harvard-edtech/coursedash/issues"
+	},
+	"homepage": "https://github.com/harvard-edtech/coursedash#readme",
+	"dependencies": {
+		"caccl": "^1.1.23"
+	},
+	"devDependencies": {
+		"eslint": "^6.6.0",
+		"eslint-config-airbnb": "^18.2.0",
+		"eslint-plugin-import": "^2.21.2",
+		"eslint-plugin-jest": "^23.17.1",
+		"eslint-plugin-jsx-a11y": "^6.3.1",
+		"eslint-plugin-react": "^7.20.0"
+	}
+}
