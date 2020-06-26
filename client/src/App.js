@@ -9,6 +9,10 @@ import initCACCL from 'caccl/client/cached';
 // Import React
 import React, { Component } from 'react';
 
+// FontAwesome
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStore } from '@fortawesome/free-solid-svg-icons';
+
 // Import shared components
 import LoadingSpinner from './shared/LoadingSpinner';
 import Header from './shared/Header';
@@ -30,8 +34,6 @@ import WidgetStore from './WidgetStore';
 
 // Import resources
 import './App.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStore } from '@fortawesome/free-solid-svg-icons';
 
 /* ----------------------- Initialization ----------------------- */
 
@@ -311,7 +313,7 @@ class App extends Component {
 
     if (
       currentView === VIEWS.CONFIGURE_WIDGET
-      && currentView === VIEWS.WIDGET_INITIAL_CONFIGURE
+      || currentView === VIEWS.WIDGET_INITIAL_CONFIGURE
     ) {
       // Get previous configuration
       const previousConfiguration = (
@@ -325,7 +327,7 @@ class App extends Component {
         <ConfigurePanel
           widget={idToWidget[selectedWidgetId]}
           previousConfiguration={previousConfiguration}
-          mustSave={currentView === VIEWS.WIDGET_INITIAL_CONFIGURE}
+          doingInitialConfig={currentView === VIEWS.WIDGET_INITIAL_CONFIGURE}
           onDone={async (newConfiguration) => {
             // Save the configuration
             if (newConfiguration) {
@@ -336,7 +338,7 @@ class App extends Component {
             }
 
             // Change back to previous view
-            if (VIEWS.WIDGET_INITIAL_CONFIGURE) {
+            if (currentView === VIEWS.WIDGET_INITIAL_CONFIGURE) {
               // Add the widget
               this.addWidget(selectedWidgetId);
             } else {
@@ -534,7 +536,7 @@ class App extends Component {
     /* --------------------------- Header --------------------------- */
 
     // Header addon text
-    let headerTextAddon = 'Home';
+    let headerTextAddon = 'Dashboard';
     if (bodyIsStore) {
       headerTextAddon = 'Widget Store';
     }

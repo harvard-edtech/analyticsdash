@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 // Import FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 // Import other components
 import WidgetPreview from './WidgetPreview';
@@ -72,6 +72,10 @@ class WidgetStore extends Component {
               aria-label="go back to dashboard"
               onClick={onOpenDashboard}
             >
+              <FontAwesomeIcon
+                icon={faChevronLeft}
+                className="mr-2"
+              />
               Back to Dashboard
             </button>
           </div>

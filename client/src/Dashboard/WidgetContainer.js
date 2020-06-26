@@ -19,7 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // Import shared propTypes
-import Widget from './propTypes/Widget';
+import Widget from '../shared/propTypes/Widget';
 
 // CSS
 import './WidgetContainer.css';
@@ -171,6 +171,19 @@ class WidgetContainer extends Component {
       <div className="alert alert-info p-2">
         {/* Header */}
         <div className="d-flex align-items-center justify-content-center mb-2">
+          {/* Icon */}
+          <div
+            className="mr-1"
+            style={{ width: '35px', height: '35px' }}
+          >
+            <img
+              src={widget.metadata.icon}
+              className="w-100 h-100"
+              aria-label={`icon for widget ${widget.metadata.title}`}
+            />
+          </div>
+
+          {/*  Title */}
           <div className="flex-grow-1">
             <h3 className="text-left m-0">
               {widget.metadata.title}
@@ -179,6 +192,8 @@ class WidgetContainer extends Component {
               </span>
             </h3>
           </div>
+
+          {/* Buttons */}
           <div>
             {buttons}
           </div>

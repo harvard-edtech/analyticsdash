@@ -50,6 +50,6 @@ export default PropTypes.shape({
     // Description of the app (human-readable)
     description: PropTypes.string.isRequired,
     // Image icon of the app
-    icon: PropTypes.node.isRequired,
+    icon: PropTypes.string.isRequired,
   }).isRequired,
 });

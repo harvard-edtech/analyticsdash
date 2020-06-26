@@ -26,6 +26,9 @@ class Header extends Component {
       rightButton,
     } = this.props;
 
+    // Update page title
+    window.document.title = `AnalyticsDash${addon ? ' | ' : ''}${addon || ''}`;
+
     // Create buttons
     const leftButtonElem = (
       leftButton
@@ -63,7 +66,7 @@ class Header extends Component {
         <nav className="navbar bg-secondary text-light shadow">
           {leftButtonElem}
           <h2 className="m-0 text-center w-100">
-            CourseDash
+            AnalyticsDash
             {addon && (
               <span style={{ fontWeight: 300 }}>
                 &nbsp;|&nbsp;

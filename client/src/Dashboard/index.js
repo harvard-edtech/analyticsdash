@@ -12,13 +12,13 @@ import FlipMove from 'react-flip-move';
 
 // Import FontAwesome Icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faPlus, faStore } from '@fortawesome/free-solid-svg-icons';
+import { faStore } from '@fortawesome/free-solid-svg-icons';
 
 // Import shared prop types
-import Widget from './shared/propTypes/Widget';
+import Widget from '../shared/propTypes/Widget';
 
 // Import shared components
-import WidgetContainer from './shared/WidgetContainer';
+import WidgetContainer from './WidgetContainer';
 
 class Dashboard extends Component {
   /**
@@ -76,11 +76,15 @@ class Dashboard extends Component {
         {widgetContainers}
 
         {/* Widget Store Button */}
-        <p className="lead mt-5 mb-5">
-          Want more widgets? Visit the&nbsp;
+        <p className="lead font-weight-normal mt-5 mb-5">
+          {
+            widgetPairs.length === 0
+              ? 'Dashboard empty. Add widgets in the'
+              : 'Want more widgets? Visit the'
+          }
           <button
             type="button"
-            className="btn btn-light border"
+            className="btn btn-light border ml-2"
             aria-label="open Widget Store"
             onClick={onOpenWidgetStore}
           >
