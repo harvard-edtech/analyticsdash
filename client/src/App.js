@@ -19,6 +19,9 @@ import Header from './shared/Header';
 import Modal from './shared/Modal';
 import MiniWidgetTitle from './shared/MiniWidgetTitle';
 
+// Import helpers
+import getCanvasData from './helpers/getCanvasData';
+
 // Import constants
 import METADATA_ID from './constants/METADATA_ID';
 import DEFAULT_SETUP from './constants/DEFAULT_SETUP';
@@ -144,6 +147,10 @@ class App extends Component {
     if (widgetOrder === undefined || widgetOrder === null) {
       ({ widgetOrder } = DEFAULT_SETUP);
     }
+
+    // Wait for data to load
+    const canvasData = getCanvasData(courseId);
+    await canvasData.loadData();
 
     // Save to state
     this.setState({
