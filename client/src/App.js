@@ -81,6 +81,8 @@ class App extends Component {
       configMap: {}, // id => configuration
       // Current order of widgets
       widgetOrder: [], // id[]
+      // Student to introduce
+      studentToIntroduce: null,
     };
   }
 
@@ -123,11 +125,26 @@ class App extends Component {
     // Load metadata
     let configMap;
     let widgetOrder;
+    let students;
     try {
-      const metadata = await api.course.app.getMetadata({
-        courseId,
-        metadata_id: METADATA_ID.value,
-      });
+      const [
+        metadata,
+        allStudents,
+      ] = await Promise.all([
+        api.course.app.getMetadata({
+          courseId,
+          metadata_id: METADATA_ID.value,
+        }),
+        api.course.listStudents({
+          courseId,
+          includeAvatar: true,
+          activeOnly: true,
+          includeEmail: true,
+        }),
+      ]);
+
+      // Save students
+      students = allStudents;
 
       // Extract widget map out of the metadata
       configMap = metadata.config_map;
@@ -148,9 +165,14 @@ class App extends Component {
       ({ widgetOrder } = DEFAULT_SETUP);
     }
 
+    // Introduce student
+    this.setState({
+      studentToIntroduce: students[Math.floor(Math.random() * students.length)]
+    });
+
     // Wait for data to load
     const canvasData = getCanvasData(courseId);
-    await canvasData.loadData();
+    await canvasData.loadData(students);
 
     // Save to state
     this.setState({
@@ -292,7 +314,10 @@ class App extends Component {
       configMap,
       widgetOrder,
       selectedWidgetId,
+      studentToIntroduce,
     } = this.state;
+
+    let modal;
 
     /* ---------------------------- Error --------------------------- */
     if (fatalErrorMessage) {
@@ -309,14 +334,95 @@ class App extends Component {
     }
 
     /* --------------------------- Loading -------------------------- */
+
+    if (studentToIntroduce) {
+      const introduction = (
+        <div className="d-flex align-items-center">
+          {/* Profile Image */}
+          <div className="mr-3">
+            <img
+              src={studentToIntroduce.avatar_url}
+              aria-label={`profile image for student "${studentToIntroduce.name}"`}
+              style={{ height: '100px' }}
+              className="img-thumbnail"
+            />
+          </div>
+          {/* Name */}
+          <div className="flex-grow-1 text-left">
+            <h3 className="font-weight-bold">
+              {studentToIntroduce.name}
+            </h3>
+            <p className="lead m-0">
+              Student of the Day
+            </p>
+          </div>
+        </div>
+      );
+      const continueButton = (
+        <button
+          type="button"
+          className={`btn btn-lg btn-${loading ? 'secondary' : 'info'}`}
+          aria-label="continue to dashaboard"
+          disabled={loading}
+          onClick={() => {
+            this.setState({
+              studentToIntroduce: null,
+            });
+          }}
+        >
+          {
+            loading
+              ? 'Loading...'
+              : 'Open Dashboard'
+          }
+        </button>
+      );
+      modal = (
+        <Modal
+          noHeader
+          body={(
+            <div className="text-center">
+              {/* Small Screen View */}
+              <div className="d-block d-md-none">
+                <div>
+                  {introduction}
+                </div>
+                <div>
+                  {continueButton}
+                </div>
+              </div>
+
+              {/* Large Screen View */}
+              <div className="d-none d-md-flex align-items-center">
+                <div className="flex-grow-1">
+                  {introduction}
+                </div>
+                <div>
+                  {continueButton}
+                </div>
+              </div>
+            </div>
+          )}
+          type={loading ? Modal.TYPES.BLOCKED : Modal.TYPES.NO_BUTTONS}
+          onClose={() => {
+            this.setState({
+              studentToIntroduce: null,
+            });
+          }}
+        />
+      );
+    }
+
     if (loading) {
       return (
-        <LoadingSpinner />
+        <div>
+          {modal}
+          <LoadingSpinner key="loader" />
+        </div>
       );
     }
 
     /* ---------------------------- Modal --------------------------- */
-    let modal;
 
     if (
       currentView === VIEWS.CONFIGURE_WIDGET
