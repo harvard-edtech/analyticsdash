@@ -2,7 +2,7 @@
 import ContentComponent from './ContentComponent';
 
 // Import icon
-import icon from './noun_dumb_320267.png';
+import icon from './icon.png';
 
 // Import requirement types
 import REQUIREMENTS from '../../constants/REQUIREMENTS';

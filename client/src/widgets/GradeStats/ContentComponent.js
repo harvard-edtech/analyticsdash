@@ -11,7 +11,7 @@ import initCACCL from 'caccl/client/cached';
 
 // Import FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBullhorn, faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 
 // Import shared components
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
@@ -119,6 +119,13 @@ class ContentComponent extends Component {
               </strong>
               {assignment.stdevNonzeroScore}
             </div>
+          </div>
+
+          <div>
+            <strong>
+              Note:
+            </strong>
+            &nbsp;stats based on nonzero scores.
           </div>
 
           <div className="mt-3">
