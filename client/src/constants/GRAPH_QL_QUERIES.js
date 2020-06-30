@@ -10,6 +10,8 @@ query MyQuery {
   course(id: ${ courseId }) {
     assignmentsConnection {
       nodes {
+        needsGradingCount
+        hasSubmittedSubmissions
         submissionsConnection(filter: {}) {
           nodes {
             attempt
@@ -23,6 +25,7 @@ query MyQuery {
                 read
               }
             }
+            gradedAt
             submittedAt
             score
             rubricAssessmentsConnection {

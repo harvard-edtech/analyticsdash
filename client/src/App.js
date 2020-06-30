@@ -11,13 +11,14 @@ import React, { Component } from 'react';
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStore } from '@fortawesome/free-solid-svg-icons';
+import { faStore, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 // Import shared components
 import LoadingSpinner from './shared/LoadingSpinner';
 import Header from './shared/Header';
 import Modal from './shared/Modal';
 import MiniWidgetTitle from './shared/MiniWidgetTitle';
+import StudentIntroduction from './shared/StudentIntroduction';
 
 // Import helpers
 import getCanvasData from './helpers/getCanvasData';
@@ -149,6 +150,11 @@ class App extends Component {
       // Extract widget map out of the metadata
       configMap = metadata.config_map;
       widgetOrder = metadata.widget_order;
+
+      // Remove widgets that no longer exist
+      widgetOrder = widgetOrder.filter((widgetId) => {
+        return idToWidget[widgetId];
+      });
     } catch (err) {
       return this.setState({
         fatalErrorMessage: err.message,
@@ -337,31 +343,14 @@ class App extends Component {
 
     if (studentToIntroduce) {
       const introduction = (
-        <div className="d-flex align-items-center">
-          {/* Profile Image */}
-          <div className="mr-3">
-            <img
-              src={studentToIntroduce.avatar_url}
-              aria-label={`profile image for student "${studentToIntroduce.name}"`}
-              style={{ height: '100px' }}
-              className="img-thumbnail"
-            />
-          </div>
-          {/* Name */}
-          <div className="flex-grow-1 text-left">
-            <h3 className="font-weight-bold">
-              {studentToIntroduce.name}
-            </h3>
-            <p className="lead m-0">
-              Student of the Day
-            </p>
-          </div>
-        </div>
+        <StudentIntroduction
+          student={studentToIntroduce}
+        />
       );
       const continueButton = (
         <button
           type="button"
-          className={`btn btn-lg btn-${loading ? 'secondary' : 'info'}`}
+          className={`btn btn-lg btn-${loading ? 'secondary' : 'warning'}`}
           aria-label="continue to dashaboard"
           disabled={loading}
           onClick={() => {
@@ -373,7 +362,15 @@ class App extends Component {
           {
             loading
               ? 'Loading...'
-              : 'Open Dashboard'
+              : (
+                <span>
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className="mr-2"
+                  />
+                  Close Intro
+                </span>
+              )
           }
         </button>
       );
@@ -576,17 +573,19 @@ class App extends Component {
     }
 
     // Dashboard (show if another body is not set)
-    if (!body) {
-      const widgetPairs = widgetOrder.map((id) => {
-        const configuration = configMap[id] || {};
-        const widget = idToWidget[id];
+    const widgetPairs = widgetOrder.map((id) => {
+      const configuration = configMap[id] || {};
+      const widget = idToWidget[id];
 
-        return {
-          widget,
-          configuration,
-        };
-      });
-      body = (
+      return {
+        widget,
+        configuration,
+      };
+    });
+    // Hide dashboard but keep it initialized so customization
+    //   is not lost while navigating away
+    const dashboard = (
+      <div className={body ? 'd-none' : ''}>
         <Dashboard
           key="dashboard"
           widgetPairs={widgetPairs}
@@ -643,8 +642,8 @@ class App extends Component {
             });
           }}
         />
-      );
-    }
+      </div>
+    );
 
     /* --------------------------- Header --------------------------- */
 
@@ -704,6 +703,7 @@ class App extends Component {
         {/* Content */}
         <div className="content-below-header text-center">
           {body}
+          {dashboard}
         </div>
       </div>
     );

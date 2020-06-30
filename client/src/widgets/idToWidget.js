@@ -1,4 +1,4 @@
-import DummyWidget from './DummyWidget';
+import GradeStats from './GradeStats';
 import SmartyWidget from './SmartyWidget';
 
 // Import helpers
@@ -6,7 +6,7 @@ import preprocessWidget from '../helpers/preprocessWidget';
 
 // Put all widgets in a list
 const widgetList = [
-  DummyWidget,
+  GradeStats,
   SmartyWidget,
 ];
 

@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types';
 
+// Component PropType
 import Comp from './Comp';
+
+// Types of requirements
+import REQUIREMENTS from '../../constants/REQUIREMENTS';
 
 /**
  * PropType for a Widget
@@ -16,6 +20,12 @@ export default PropTypes.shape({
   configureOnAdd: PropTypes.boolean,
   // Initial configuration to start with
   initialConfiguration: PropTypes.objectOf(PropTypes.any),
+
+  // List of requirements for the widget to be shown
+  requirements: PropTypes.arrayOf(PropTypes.oneOf([
+    REQUIREMENTS.AT_LEAST_ONE_GRADED_ASSIGNMENT,
+    REQUIREMENTS.AT_LEAST_ONE_SUBMITTED_ASSIGNMENT,
+  ])),
 
   // View (component) for the widget itself
   // May accept the following propTypes:

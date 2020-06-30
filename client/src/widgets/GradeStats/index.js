@@ -4,19 +4,22 @@ import ContentComponent from './ContentComponent';
 // Import icon
 import icon from './noun_dumb_320267.png';
 
+// Import requirement types
+import REQUIREMENTS from '../../constants/REQUIREMENTS';
+
 export default {
-  id: 'dummywidget',
+  id: 'gradestats',
 
-  configurable: true,
+  ContentComponent,
 
-  ContentComponent: ContentComponent,
-  HelpComponent: ContentComponent,
-  ConfigureComponent: ContentComponent,
+  requirements: [
+    REQUIREMENTS.AT_LEAST_ONE_GRADED_ASSIGNMENT,
+  ],
 
   metadata: {
     icon,
-    title: 'DummyWidget',
-    subtitle: 'A test widget that does nothing.',
+    title: 'Grade Stats',
+    subtitle: 'Mean, median, and standard deviation for graded assignments.',
     description: 'I really don\'t know what to say since this is a really boring tool that really does nothing of interest. You should probably just stop reading.',
   },
 };

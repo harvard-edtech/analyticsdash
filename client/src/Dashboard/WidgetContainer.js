@@ -16,10 +16,14 @@ import {
   faEllipsisH,
   faInfoCircle,
   faTimes,
+  faHourglassHalf,
 } from '@fortawesome/free-solid-svg-icons';
 
 // Import shared propTypes
 import Widget from '../shared/propTypes/Widget';
+
+// Import helpers
+import checkRequirements from './helpers/checkRequirements';
 
 // CSS
 import './WidgetContainer.css';
@@ -167,6 +171,34 @@ class WidgetContainer extends Component {
       </div>
     );
 
+    /* --------------------------- Content -------------------------- */
+
+    const requirementsErrorMessage = checkRequirements(widget.requirements);
+
+    const content = (
+      requirementsErrorMessage
+        ? (
+          <div className="text-info p-3">
+            <FontAwesomeIcon
+              icon={faHourglassHalf}
+              className="mr-2"
+            />
+            {requirementsErrorMessage}
+          </div>
+        )
+        : (
+          <ContentComponent
+            widget={widget}
+            configuration={configuration}
+            onOpenConfiguration={onOpenConfiguration}
+            onOpenHelp={onOpenHelp}
+            onChangeConfiguration={onChangeConfiguration}
+          />
+        )
+    );
+
+    /* --------------------------- Full UI -------------------------- */
+
     return (
       <div className="alert alert-info p-2">
         {/* Header */}
@@ -200,14 +232,8 @@ class WidgetContainer extends Component {
         </div>
 
         {/* Contents */}
-        <div className="alert alert-light text-dark m-0">
-          <ContentComponent
-            widget={widget}
-            configuration={configuration}
-            onOpenConfiguration={onOpenConfiguration}
-            onOpenHelp={onOpenHelp}
-            onChangeConfiguration={onChangeConfiguration}
-          />
+        <div className="alert alert-light text-dark m-0 p-2">
+          {content}
         </div>
       </div>
     );

@@ -1,11 +1,28 @@
 // Import caccl
 import initCACCL from 'caccl/client/cached';
 
+// Import stats
+import stats from 'stats-lite';
+
 // Import queries
 import GRAPH_QL_QUERIES from '../constants/GRAPH_QL_QUERIES';
 
 // Initialize caccl
 const { api } = initCACCL();
+
+/* --------------------------- Helpers -------------------------- */
+
+/**
+ * Round to two decimal places
+ * @author Gabe Abrams
+ * @param {number} num - the number to round
+ * @return {number} rounded number
+ */
+const round = (num) => {
+  return (Math.round(100 * num) / 100);
+};
+
+/* ---------------------------- Class --------------------------- */
 
 class CanvasData {
   /**
@@ -63,7 +80,24 @@ class CanvasData {
     this.submissions = {}; // assignmentId => submissions[]
     unprocessedSubmissions.course.assignmentsConnection.nodes
       .forEach((assignment) => {
-        const assignmentId = assignment._id;
+        const assignmentId = Number.parseInt(assignment._id);
+
+        // Find the assignment index
+        let assignmentIndex;
+        for (let i = 0; i < this.assignments.length; i++) {
+          if (this.assignments[i].id === assignmentId) {
+            assignmentIndex = i;
+            break;
+          }
+        }
+
+        // Process assignment
+        this.assignments[assignmentIndex].needsGradingCount = (
+          assignment.needsGradingCount
+        );
+        this.assignments[assignmentIndex].hasSubmissions = (
+          assignment.hasSubmittedSubmissions
+        );
 
         // Process submissions
         const submissions = (
@@ -73,8 +107,13 @@ class CanvasData {
             .map((sub) => {
               // Process sub
               const submittedAt = (
-                sub.submittedAt || sub.createdAt
+                !sub.missing
                   ? new Date(sub.submittedAt || sub.createdAt)
+                  : null
+              );
+              const gradedAt = (
+                (sub.gradedAt)
+                  ? new Date(sub.gradedAt)
                   : null
               );
 
@@ -129,6 +168,7 @@ class CanvasData {
                 submittedAt,
                 comments,
                 rubricAssessments,
+                gradedAt,
                 attempt: sub.attempt,
                 late: sub.late,
                 missing: sub.missing,
@@ -212,7 +252,7 @@ class CanvasData {
       });
       this.assignments[i].numLateSubmissions = numLate;
 
-      // Missing
+      // Missing, submitted
       let numMissing = 0;
       this.submissions[assignmentId].forEach((sub) => {
         if (sub.missing) {
@@ -220,10 +260,15 @@ class CanvasData {
         }
       });
       this.assignments[i].numMissingSubmissions = numMissing;
+      this.assignments[i].numSubmitted = this.students.length - numMissing;
 
-      // Has submissions
-      this.assignments[i].hasSubmissions = (
-        numMissing < this.submissions[assignmentId].length
+      // Percent submitted
+      this.assignments[i].percentSubmitted = (
+        this.students.length > 0
+          ? round(
+            100 * (this.assignments[i].numSubmitted / this.students.length)
+          ) || 0
+          : 0
       );
 
       // Score stats
@@ -241,32 +286,18 @@ class CanvasData {
       // > Calculate
       let median = 0;
       let mean = 0;
-      let totalScore = 0;
+      let stdev = 0;
       if (nonzeroScores.length > 0) {
-        // Median
-        const middleIndex = Math.floor(nonzeroScores.length / 2);
-        median = (
-          nonzeroScores.length % 2 !== 0
-            ? nonzeroScores[middleIndex]
-            : Math.round(
-              (
-                100
-                * (nonzeroScores[middleIndex - 1] + nonzeroScores[middleIndex])
-              ) / 2
-            ) / 100
-        );
-
-        // Mean
-        nonzeroScores.forEach((sub) => {
-          totalScore += sub.score;
-        });
-        mean = Math.round(100 * (totalScore / nonzeroScores.length)) / 100;
+        median = round(stats.median(nonzeroScores));
+        mean = round(stats.mean(nonzeroScores));
+        stdev = round(stats.stdev(nonzeroScores));
       }
       this.assignments[i].medianNonzeroScore = median;
       this.assignments[i].avgNonzeroScore = mean;
+      this.assignments[i].stdevNonzeroScore = stdev;
 
-      // Mark assignment as graded
-      this.assignments[i].gradingStarted = (totalScore > 0);
+      // Stats on grading
+      this.assignments[i].gradingStarted = (nonzeroScores.length > 0);
     });
 
     // Sort assignments by average timestamp
@@ -283,70 +314,53 @@ class CanvasData {
       }
 
       // Compare timestamps
-      if (a.avgSubmissionTime < b.avgSubmissionTime) {
+      if (a.avgSubmissionTime > b.avgSubmissionTime) {
         return -1;
       }
-      if (a.avgSubmissionTime > b.avgSubmissionTime) {
+      if (a.avgSubmissionTime < b.avgSubmissionTime) {
         return 1;
       }
       return 0;
     });
 
-    // Find the most recent assignments
-    this.mostRecentAssignmentWithSubmissions = null;
-    this.mostRecentGradedAssignment = null;
-    for (let i = 0; i < this.assignments.length; i++) {
-      // Update sub assignment
-      if (
-        !this.mostRecentAssignmentWithSubmissions
-        && this.assignments[i].hasSubmissions
-      ) {
-        this.mostRecentAssignmentWithSubmissions = assignments[i];
+    // Create assignment orderings
+    const byMostRecentSubmissions = [...this.assignments];
+    byMostRecentSubmissions.sort((a, b) => {
+      // Sort by hasSubmissions
+      if (a.hasSubmissions && !b.hasSubmissions) {
+        return -1;
       }
-
-      // Update graded assignment
-      if (
-        !this.mostRecentGradedAssignment
-        && this.assignments[i].gradingStarted
-      ) {
-        this.mostRecentGradedAssignment = assignments[i];
+      if (!a.hasSubmissions && b.hasSubmissions) {
+        return 1;
       }
-
-      // Exit loop if done
-      if (
-        this.mostRecentAssignmentWithSubmissions
-        && this.mostRecentGradedAssignment
-      ) {
-        break;
+      return 0;
+    });
+    const byMostRecentGrading = [...this.assignments];
+    byMostRecentGrading.sort((a, b) => {
+      // Sort by gradingStarted
+      if (a.gradingStarted && !b.gradingStarted) {
+        return -1;
       }
-    }
-  }
-
-  /**
-   * Get the most recent assignment that has at least one submission
-   * @author Gabe Abrams
-   * @return {Assignment} most recent assignment with submissions
-   */
-  getMostRecentAssignmentWithSubmissions() {
-    return this.mostRecentAssignmentWithSubmissions;
-  }
-
-  /**
-   * Get the most recent assignment that has at least one graded submission
-   * @author Gabe Abrams
-   * @return {Assignment} most recent assignment with at least one graded sub
-   */
-  getMostRecentGradedSubmission() {
-    return this.mostRecentGradedAssignment;
+      if (!a.gradingStarted && b.gradingStarted) {
+        return 1;
+      }
+      return 0;
+    });
+    this.assignmentsOrdered = {
+      byMostRecentSubmissions,
+      byMostRecentGrading,
+    };
   }
 
   /**
    * Get the list of assignments
    * @author Gabe Abrams
+   * @param {string} [sortOrder=byMostRecentGrading] - the order to sort by.
+   *   allowed values: byMostRecentGrading, byMostRecentSubmissions
    * @return {Assignment[]} assignments in the course with some added params
    */
-  listAssignments() {
-    return this.assignments;
+  listAssignments(sortOrder = 'byMostRecentGrading') {
+    return this.assignmentsOrdered[sortOrder];
   }
 
   /**
@@ -394,6 +408,15 @@ class CanvasData {
    */
   getUser(id) {
     return this.idToUser[id] || null;
+  }
+
+  /**
+   * Get the current courseId
+   * @author Gabe Abrams
+   * @return {number} courseId
+   */
+  getCourseId() {
+    return this.courseId;
   }
 }
 

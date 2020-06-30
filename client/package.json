@@ -10,7 +10,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.5.0",
-    "caccl": "^1.1.24",
+    "caccl": "^1.1.25",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
     "prop-types": "^15.7.2",
@@ -19,6 +19,7 @@
     "react-dom": "^16.13.1",
     "react-flip-move": "^3.0.4",
     "react-scripts": "3.4.1",
+    "stats-lite": "^2.2.0",
     "typescript": "^3.9.5"
   },
   "scripts": {

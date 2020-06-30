@@ -294,7 +294,7 @@ Modal.propTypes = {
   // The body of the modal
   body: PropTypes.node.isRequired,
   // Handler to call when modal is closed
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
   // The title of the modal
   title: PropTypes.node,
   // If true, no header
@@ -319,6 +319,8 @@ Modal.defaultProps = {
   okayLabel: 'Okay',
   // By default, the okay button is info color
   okayColor: 'info',
+  // No handler
+  onClose: () => {},
 };
 
 export default Modal;
