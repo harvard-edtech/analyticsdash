@@ -1,5 +1,6 @@
 // Import components
 import ContentComponent from './ContentComponent';
+import HelpComponent from './HelpComponent';
 
 // Import icon
 import icon from './icon.png';
@@ -11,6 +12,7 @@ export default {
   id: 'gradestats',
 
   ContentComponent,
+  HelpComponent,
 
   requirements: [
     REQUIREMENTS.AT_LEAST_ONE_GRADED_ASSIGNMENT,

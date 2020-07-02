@@ -219,9 +219,6 @@ class WidgetContainer extends Component {
           <div className="flex-grow-1">
             <h3 className="text-left m-0">
               {widget.metadata.title}
-              <span style={{ fontWeight: 300 }}>
-                &nbsp;Widget
-              </span>
             </h3>
           </div>
 

@@ -41,6 +41,7 @@ export default PropTypes.shape({
   // - widget
   // - configuration [object]
   // - onChangeConfiguration(newConfiguration) [function]
+  //    ^ call this with every update
   ConfigurationComponent: Comp, // Required if configurable
 
   // View (component) for help

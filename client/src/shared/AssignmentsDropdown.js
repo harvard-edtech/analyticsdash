@@ -76,12 +76,14 @@ class AssignmentsDropdown extends Component {
       <div className="input-group mb-2">
         <div className="input-group-prepend">
           <span className="font-weight-bold input-group-text alert-dark">
-            Assignment
+            Choose Assignment:
           </span>
         </div>
         <select
+          id="asdf"
           className="custom-select alert-dark bg-white"
           selectedindex={chosenAssignmentIndex}
+          aria-label="choose the assignment for this widget"
           onChange={(e) => {
             const { selectedIndex } = e.target;
 

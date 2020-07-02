@@ -1,5 +1,5 @@
 /**
- * Dummy content component
+ * Content for the GradeStats component
  * @author Gabe Abrams
  */
 
@@ -17,9 +17,12 @@ import { faBullhorn } from '@fortawesome/free-solid-svg-icons';
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 import Modal from '../../shared/Modal';
+import CopyButton from '../../shared/CopyButton';
 
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
+
+/* -------------------------- Constants ------------------------- */
 
 // States
 const STATES = {
@@ -76,6 +79,18 @@ class ContentComponent extends Component {
       />
     );
 
+    // Create announcement language
+    const announcementTitle = (
+      assignment
+        ? `Grade stats for "${assignment.name.trim()}"`
+        : ''
+    );
+    const announcementMessage = (
+      assignment
+        ? `For the assignment "${assignment.name.trim()}," the mean was ${assignment.avgNonzeroScore} points, the median was ${assignment.medianNonzeroScore} points, and the standard deviation was ${assignment.stdevNonzeroScore} points.`
+        : ''
+    );
+
     /* ---------------------------- Body ---------------------------- */
 
     let body;
@@ -91,47 +106,78 @@ class ContentComponent extends Component {
     if (!body) {
       body = (
         <div>
-          <div className="row">
-            <div
-              className="col"
-              style={{ fontSize: '25px' }}
-            >
-              <strong>
-                Mean:&nbsp;
-              </strong>
-              {assignment.avgNonzeroScore}
-            </div>
-            <div
-              className="col"
-              style={{ fontSize: '25px' }}
-            >
-              <strong>
-                Median:&nbsp;
-              </strong>
-              {assignment.medianNonzeroScore}
-            </div>
-            <div
-              className="col"
-              style={{ fontSize: '25px' }}
-            >
-              <strong>
-                SD:&nbsp;
-              </strong>
-              {assignment.stdevNonzeroScore}
-            </div>
-          </div>
-
-          <div>
+          {/* Subtitle */}
+          <div className="text-left mt-2">
             <strong>
-              Note:
+              Statistics:
             </strong>
-            &nbsp;stats based on nonzero scores.
+            <span style={{ fontWeight: 300 }}>
+              &nbsp;(stats based only on nonzero scores)
+            </span>
           </div>
 
-          <div className="mt-3">
+          {/* Stat Group */}
+          <div className="list-group text-left">
+            {/* Mean */}
+            <li className="list-group-item pt-1 pb-1 pr-1 pl-2">
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1">
+                  <strong>
+                    Mean:&nbsp;
+                  </strong>
+                  {assignment.avgNonzeroScore}
+                </div>
+                <div>
+                  <CopyButton
+                    text={assignment.avgNonzeroScore}
+                    small
+                  />
+                </div>
+              </div>
+            </li>
+
+            {/* Median */}
+            <li className="list-group-item pt-1 pb-1 pr-1 pl-2">
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1">
+                  <strong>
+                    Median:&nbsp;
+                  </strong>
+                  {assignment.medianNonzeroScore}
+                </div>
+                <div>
+                  <CopyButton
+                    text={assignment.medianNonzeroScore}
+                    small
+                  />
+                </div>
+              </div>
+            </li>
+
+            {/* Standard Deviation */}
+            <li className="list-group-item pt-1 pb-1 pr-1 pl-2">
+              <div className="d-flex align-items-center">
+                <div className="flex-grow-1">
+                  <strong>
+                    SD:&nbsp;
+                  </strong>
+                  {assignment.stdevNonzeroScore}
+                </div>
+                <div>
+                  <CopyButton
+                    text={assignment.stdevNonzeroScore}
+                    small
+                  />
+                </div>
+              </div>
+            </li>
+          </div>
+
+          {/* Announcement */}
+          <div className="text-center mt-2">
             <button
               type="button"
-              className="btn btn-lg btn-secondary"
+              className="btn btn-light border mr-2"
               aria-label="send grade stats announcement to students"
               onClick={() => {
                 this.setState({
@@ -145,6 +191,11 @@ class ContentComponent extends Component {
               />
               Post Stats Announcement
             </button>
+            <CopyButton
+              item="Announcement Text"
+              text={announcementMessage}
+              variant="light border"
+            />
           </div>
         </div>
       );
@@ -154,16 +205,6 @@ class ContentComponent extends Component {
 
     let modal;
 
-    const announcementTitle = (
-      assignment
-        ? `Grade stats for "${assignment.name.trim()}"`
-        : ''
-    );
-    const announcementMessage = (
-      assignment
-        ? `For the assignment "${assignment.name.trim()}," the mean was ${assignment.avgNonzeroScore} points, the median was ${assignment.medianNonzeroScore} points, and the standard deviation was ${assignment.stdevNonzeroScore} points.`
-        : ''
-    );
     if (fatalErrorMessage) {
       modal = (
         <Modal
@@ -254,7 +295,7 @@ class ContentComponent extends Component {
             });
           }}
         />
-      )
+      );
     }
 
     /* ----------------------- Create Full UI ----------------------- */

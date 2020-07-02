@@ -20,9 +20,6 @@ class MiniWidgetTitle extends Component {
     return (
       <div className="alert alert-info d-inline-block mb-0 pt-0 pb-0 pl-2 pr-2">
         {widget.metadata.title}
-        <span style={{ fontWeight: 300 }}>
-          &nbsp;Widget
-        </span>
       </div>
     );
   }

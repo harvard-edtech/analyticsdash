@@ -11,7 +11,7 @@ import React, { Component } from 'react';
 
 // FontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStore, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faStore } from '@fortawesome/free-solid-svg-icons';
 
 // Import shared components
 import LoadingSpinner from './shared/LoadingSpinner';
@@ -45,6 +45,8 @@ import './App.css';
 const { api, getStatus } = initCACCL();
 
 /* -------------------------- Constants ------------------------- */
+
+const MIN_INTRODUCTION_MS = 3000;
 
 const VIEWS = {
   DASHBOARD: 'dashboard',
@@ -178,7 +180,12 @@ class App extends Component {
 
     // Wait for data to load
     const canvasData = getCanvasData(courseId);
-    await canvasData.loadData(students);
+    await Promise.all([
+      canvasData.loadData(students),
+      // Also make sure that a minimum amount of time has passed so the
+      // user has time to read the intro
+      new Promise((r) => { setTimeout(r, MIN_INTRODUCTION_MS); }),
+    ]);
 
     // Save to state
     this.setState({
@@ -186,6 +193,7 @@ class App extends Component {
       configMap,
       widgetOrder,
       loading: false,
+      studentToIntroduce: null,
     });
   }
 
@@ -342,63 +350,13 @@ class App extends Component {
     /* --------------------------- Loading -------------------------- */
 
     if (studentToIntroduce) {
-      const introduction = (
-        <StudentIntroduction
-          student={studentToIntroduce}
-        />
-      );
-      const continueButton = (
-        <button
-          type="button"
-          className={`btn btn-lg btn-${loading ? 'secondary' : 'warning'}`}
-          aria-label="continue to dashaboard"
-          disabled={loading}
-          onClick={() => {
-            this.setState({
-              studentToIntroduce: null,
-            });
-          }}
-        >
-          {
-            loading
-              ? 'Loading...'
-              : (
-                <span>
-                  <FontAwesomeIcon
-                    icon={faTimes}
-                    className="mr-2"
-                  />
-                  Close Intro
-                </span>
-              )
-          }
-        </button>
-      );
       modal = (
         <Modal
           noHeader
           body={(
-            <div className="text-center">
-              {/* Small Screen View */}
-              <div className="d-block d-md-none">
-                <div>
-                  {introduction}
-                </div>
-                <div>
-                  {continueButton}
-                </div>
-              </div>
-
-              {/* Large Screen View */}
-              <div className="d-none d-md-flex align-items-center">
-                <div className="flex-grow-1">
-                  {introduction}
-                </div>
-                <div>
-                  {continueButton}
-                </div>
-              </div>
-            </div>
+            <StudentIntroduction
+              student={studentToIntroduce}
+            />
           )}
           type={loading ? Modal.TYPES.BLOCKED : Modal.TYPES.NO_BUTTONS}
           onClose={() => {
