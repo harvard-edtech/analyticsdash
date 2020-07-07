@@ -50,14 +50,34 @@ class GradeHistogramContentComponent extends Component {
       />
     );
 
-    // Collate assignment grade data from getCanvasData
-    const assignmentSubs = getCanvasData().submissions[assignment.assignmentId];
-    const scores = assignmentSubs.map((sub) => { return sub.score });
+    const data = getCanvasData();
 
+    /* ---------------------------- Body ---------------------------- */
+    let body;
+
+    // Waiting for assignment
+    if (!assignment) {
+      body = (
+        <LoadingSpinner />
+      );
+    }
+
+    // Assignment was there
+    if (!body) {
+      // Collate assignment grade data
+      const assignmentSubs = data.listSubmissions(assignment.assignmentId);
+      const scores = assignmentSubs.map((sub) => { return sub.score; });
+      body = (
+        <div>
+          {scores[0]}
+        </div>
+      );
+    }
 
     return (
       <div>
         {assignmentDropdown}
+        {body}
       </div>
     );
   }

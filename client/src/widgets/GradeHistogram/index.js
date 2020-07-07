@@ -1,7 +1,7 @@
 // Import components
-import ContentComponent from './ContentComponent';
-import ConfigurationComponent from './ConfigurationComponent';
-import HelpComponent from './HelpComponent';
+import ContentComponent from './GradeHistogramContentComponent';
+import ConfigureComponent from './GradeHistogramConfigurationComponent';
+import HelpComponent from './GradeHistogramHelpComponent';
 
 // Import icon
 import icon from './icon.png';
@@ -18,7 +18,7 @@ export default {
   },
 
   ContentComponent,
-  ConfigurationComponent,
+  ConfigureComponent,
   HelpComponent,
 
   requirements: [
