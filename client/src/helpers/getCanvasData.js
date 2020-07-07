@@ -7,6 +7,9 @@ import stats from 'stats-lite';
 // Import queries
 import GRAPH_QL_QUERIES from '../constants/GRAPH_QL_QUERIES';
 
+// Import helpers
+import visitServerEndpoint from './visitServerEndpoint';
+
 // Initialize caccl
 const { api } = initCACCL();
 
@@ -47,6 +50,7 @@ class CanvasData {
       assignments,
       assignmentGroups,
       teachingTeamMembers,
+      eventsWithAttendance,
       unprocessedSubmissions,
     ] = await Promise.all([
       api.course.assignment.list({ courseId, ignoreOverridesForDates: true }),
@@ -56,6 +60,10 @@ class CanvasData {
         includeAvatar: true,
         activeOnly: true,
         includeEmail: true,
+      }),
+      visitServerEndpoint({
+        path: `/api/courses/${courseId}/attendance`,
+        method: 'GET',
       }),
       api.graphQL.sendQuery({
         query: GRAPH_QL_QUERIES.listSubmissions(courseId),
@@ -350,6 +358,10 @@ class CanvasData {
       byMostRecentSubmissions,
       byMostRecentGrading,
     };
+
+    /* ------------------------- Attendance ------------------------- */
+
+    console.log(eventsWithAttendance);
   }
 
   /**

@@ -31,7 +31,8 @@
 	},
 	"homepage": "https://github.com/harvard-edtech/coursedash#readme",
 	"dependencies": {
-		"caccl": "^1.1.25"
+		"caccl": "^1.1.25",
+		"mongodb": "^3.5.9"
 	},
 	"devDependencies": {
 		"eslint": "^6.6.0",
