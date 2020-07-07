@@ -42,7 +42,7 @@ export default PropTypes.shape({
   // - configuration [object]
   // - onChangeConfiguration(newConfiguration) [function]
   //    ^ call this with every update
-  ConfigurationComponent: Comp, // Required if configurable
+  ConfigureComponent: Comp, // Required if configurable
 
   // View (component) for help
   // May accept the following propTypes:
