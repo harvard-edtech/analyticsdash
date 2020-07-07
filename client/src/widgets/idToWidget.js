@@ -1,5 +1,6 @@
 import GradeStats from './GradeStats';
 import SmartyWidget from './SmartyWidget';
+import GradeHistogram from './GradeHistogram';
 
 // Import helpers
 import preprocessWidget from '../helpers/preprocessWidget';
@@ -8,6 +9,7 @@ import preprocessWidget from '../helpers/preprocessWidget';
 const widgetList = [
   GradeStats,
   SmartyWidget,
+  GradeHistogram,
 ];
 
 // Convert to map
