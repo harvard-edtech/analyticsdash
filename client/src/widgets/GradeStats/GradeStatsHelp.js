@@ -8,9 +8,9 @@ import React, { Component } from 'react';
 
 /* ---------------------------- Class --------------------------- */
 
-class HelpComponent extends Component {
+class GradeStatsHelp extends Component {
   /**
-   * Render HelpComponent
+   * Render GradeStatsHelp
    * @author Gabe Abrams
    */
   render() {
@@ -67,4 +67,4 @@ class HelpComponent extends Component {
   }
 }
 
-export default HelpComponent;
+export default GradeStatsHelp;

@@ -39,7 +39,7 @@ const { api } = initCACCL();
 
 /* ---------------------------- Class --------------------------- */
 
-class ContentComponent extends Component {
+class GradeStatsContent extends Component {
   constructor(props) {
     super(props);
 
@@ -58,7 +58,7 @@ class ContentComponent extends Component {
   }
 
   /**
-   * Render ContentComponent
+   * Render GradeStatsContent
    * @author Gabe Abrams
    */
   render() {
@@ -310,4 +310,4 @@ class ContentComponent extends Component {
   }
 }
 
-export default ContentComponent;
+export default GradeStatsContent;

@@ -1,6 +1,6 @@
 // Import components
-import ContentComponent from './ContentComponent';
-import HelpComponent from './HelpComponent';
+import ContentComponent from './GradeStatsContent';
+import HelpComponent from './GradeStatsHelp';
 
 // Import icon
 import icon from './icon.png';
