@@ -8,9 +8,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Import library components
-import { Bar } from 'nivo';
+import { ResponsiveBar } from '@nivo/bar';
 
-// Import shared components 
+// Import shared components
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 
@@ -24,9 +24,9 @@ class GradeHistogramContentComponent extends Component {
     super(props);
 
     this.state = {
-      // Current assignment 
+      // Current assignment
       assignment: null,
-    }
+    };
   }
 
   render() {
@@ -37,6 +37,13 @@ class GradeHistogramContentComponent extends Component {
     const {
       configuration,
     } = this.props;
+
+    console.log(this.props);
+    console.log(configuration);
+
+    const {
+      nBuckets,
+    } = configuration;
 
     // Define assignment dropdown menu
     const assignmentDropdown = (
@@ -50,7 +57,7 @@ class GradeHistogramContentComponent extends Component {
       />
     );
 
-    const data = getCanvasData();
+    const canvasData = getCanvasData();
 
     /* ---------------------------- Body ---------------------------- */
     let body;
@@ -64,12 +71,40 @@ class GradeHistogramContentComponent extends Component {
 
     // Assignment was there
     if (!body) {
-      // Collate assignment grade data
-      const assignmentSubs = data.listSubmissions(assignment.assignmentId);
-      const scores = assignmentSubs.map((sub) => { return sub.score; });
+      // Lookup assignment submission grades
+      const subs = canvasData.listSubmissions(assignment.id);
+      const scores = subs.map((sub) => { return sub.score; });
+
+      // Determine bucket sizes
+      const bucketSize = assignment.points_possible / nBuckets;
+      console.log(bucketSize);
+
+      // Collate grade data into buckets
+      const histogramData = [];
+      for (let i = 0; i < nBuckets; i++) {
+        console.log(i);
+        histogramData.push({
+          range: `${bucketSize * i} - ${bucketSize * (i + 1) - 0.1}`,
+          numSubmissions: 0,
+        });
+      }
+      scores.forEach((score) => {
+        let bucketIndex;
+        if (score === assignment.points_possible) {
+          bucketIndex = nBuckets - 1;
+        } else {
+          bucketIndex = Math.floor(score / bucketSize);
+        }
+        //histogramData[bucketIndex].numSubmissions += 1;
+      });
+
       body = (
-        <div>
-          {scores[0]}
+        <div style={{height:500}}>
+          <ResponsiveBar
+            data={[{range: 'hi', numSubmissions: 5}]}
+            indexBy="range"
+            keys={['numSubmissions']}
+          />
         </div>
       );
     }
