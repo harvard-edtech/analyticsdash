@@ -14,6 +14,9 @@ import { ResponsiveBar } from '@nivo/bar';
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 
+// Import style
+import './GradeHistogramContentComponent.css';
+
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
 
@@ -37,9 +40,6 @@ class GradeHistogramContentComponent extends Component {
     const {
       configuration,
     } = this.props;
-
-    console.log(this.props);
-    console.log(configuration);
 
     const {
       nBuckets,
@@ -71,42 +71,84 @@ class GradeHistogramContentComponent extends Component {
 
     // Assignment was there
     if (!body) {
-      // Lookup assignment submission grades
+      // Lookup assignment submissions
       const subs = canvasData.listSubmissions(assignment.id);
-      const scores = subs.map((sub) => { return sub.score; });
+      // Assignment has no points
+      if (assignment.points_possible === 0) {
+        body = (
+          <div>
+            This assignment had no points available.
+          </div>
+        );
+      } else if (subs.length === 0) {
+        body = (
+          <div>
+            This assignment has no graded submissions.
+          </div>
+        );
+      } else {
+        // Get submission grades
+        const scores = subs.map((sub) => { return sub.score; });
 
-      // Determine bucket sizes
-      const bucketSize = assignment.points_possible / nBuckets;
-      console.log(bucketSize);
+        // Determine bucket sizes
+        const bucketSize = assignment.points_possible / nBuckets;
 
-      // Collate grade data into buckets
-      const histogramData = [];
-      for (let i = 0; i < nBuckets; i++) {
-        console.log(i);
-        histogramData.push({
-          range: `${bucketSize * i} - ${bucketSize * (i + 1) - 0.1}`,
-          numSubmissions: 0,
-        });
-      }
-      scores.forEach((score) => {
-        let bucketIndex;
-        if (score === assignment.points_possible) {
-          bucketIndex = nBuckets - 1;
-        } else {
-          bucketIndex = Math.floor(score / bucketSize);
+        // Collate grade data into buckets
+        const histogramData = [];
+        for (let i = 0; i < nBuckets; i++) {
+          histogramData.push({
+            range: `${+(bucketSize * i).toFixed(2)} - ${+(bucketSize * (i + 1)).toFixed(2)}`,
+            numSubmissions: 0,
+          });
         }
-        //histogramData[bucketIndex].numSubmissions += 1;
-      });
+        scores.forEach((score) => {
+          let bucketIndex;
+          if (score === assignment.points_possible) {
+            bucketIndex = nBuckets - 1;
+          } else {
+            bucketIndex = Math.floor(score / bucketSize);
+          }
+          histogramData[bucketIndex].numSubmissions += 1;
+        });
 
-      body = (
-        <div style={{height:500}}>
-          <ResponsiveBar
-            data={[{range: 'hi', numSubmissions: 5}]}
-            indexBy="range"
-            keys={['numSubmissions']}
-          />
-        </div>
-      );
+        body = (
+          <div className="GradeHistogram-content-container">
+            <ResponsiveBar
+              data={histogramData}
+              indexBy="range"
+              keys={['numSubmissions']}
+              padding={0.05}
+              colors={{
+                scheme: 'category10',
+              }}
+              margin={{
+                top: 50,
+                right: 50,
+                bottom: 50,
+                left: 50,
+              }}
+              label="range"
+              enableGridY
+              axisLeft={{
+                legend: 'Number of Submissions',
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legendPosition: 'middle',
+                legendOffset: -40,
+              }}
+              axisBottom={{
+                legend: 'Grade Range',
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legendPosition: 'middle',
+                legendOffset: 40,
+              }}
+            />
+          </div>
+        );
+      }
     }
 
     return (

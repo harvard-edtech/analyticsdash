@@ -9,23 +9,20 @@ import PropTypes from 'prop-types';
 
 /* ---------------------------- Class --------------------------- */
 
-class GradeHistogramConfigurationComponent extends Component {
+class GradeHistogramConfigureComponent extends Component {
   render() {
     const {
       configuration,
       onChangeConfiguration,
     } = this.props;
-    console.log(this.props);
 
-    const options = [5, 10, 15, 20].map((n) => {
+    const options = [2, 5, 10, 15, 20].map((n) => {
       return (
         <option key={n}>
           {n}
         </option>
       );
     });
-
-    console.log(configuration.nBuckets);
 
     return (
       <div className="input-group mb-2">
@@ -50,9 +47,9 @@ class GradeHistogramConfigurationComponent extends Component {
   }
 }
 
-GradeHistogramConfigurationComponent.propTypes = {
+GradeHistogramConfigureComponent.propTypes = {
   configuration: PropTypes.shape({ nBuckets: PropTypes.number }).isRequired,
   onChangeConfiguration: PropTypes.func.isRequired,
 };
 
-export default GradeHistogramConfigurationComponent;
+export default GradeHistogramConfigureComponent;
