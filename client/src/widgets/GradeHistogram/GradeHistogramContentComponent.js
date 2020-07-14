@@ -145,6 +145,13 @@ class GradeHistogramContentComponent extends Component {
                 legendPosition: 'middle',
                 legendOffset: 40,
               }}
+              tooltip={(bar) => {
+                return (
+                  <div>
+                    {`${bar.value} submissions (${((bar.value / subs.length) * 100).toFixed(2)}%)`}
+                  </div>
+                );
+              }}
             />
           </div>
         );
