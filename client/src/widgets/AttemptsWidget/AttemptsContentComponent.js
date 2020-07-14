@@ -54,8 +54,12 @@ class AttemptsContentComponent extends Component {
     // Initialize empty buckets for bar chart
     const data = [
       {
-        "attempts": "1",
+        "attempts": "No Submissions",
         "students": 0
+      },
+      {
+        "attempts": "1",
+        "students": 50
       },
       {
         "attempts": "2",
@@ -99,20 +103,13 @@ class AttemptsContentComponent extends Component {
         if (attempt > 4) {
           data[4].students++;
         }
-
-        // Filter out 0 attempt submissions
-        if (attempt <= 0) {
-          // return;
-        }
-
-        // Increment respective attempts bucket if within 1-4
-        // data[attempt - 1].students++;
         data[attempt].students++;
       })
     }
 
     // custtom tooltip that appears on hover
     const customTooltip = (args) => {
+      console.log(args)
       let percentage = (( args.value / numStudents ) * 100).toFixed(2);
       return (
         <div>
@@ -121,6 +118,7 @@ class AttemptsContentComponent extends Component {
         </div>
       );
     }
+        const getColor = (bar) => { return bar.indexValue === 'No Submissions' ? '#FF3333' : '#03A9F3' }
 
     // initialize the bar chart
     const bar = (
@@ -131,7 +129,7 @@ class AttemptsContentComponent extends Component {
         maxValue={numStudents}
         margin={{ top: 20, right: 80, bottom: 50, left: 80 }}
         padding={0.3}
-        colors="#03A9F3"
+        colors={getColor}
         borderColor={{
           from: 'color',
           modifiers: [
@@ -199,7 +197,7 @@ class AttemptsContentComponent extends Component {
       <div>
         {assignmentDropdown}
         {body}
-        <div style={{ width: '100%', height: '300px', paddingBottom: '20px' }}>
+        <div style={{ width: '100%', height: '500px' , paddingBottom: '10px' }}>
           {bar}
         </div>
       </div>
