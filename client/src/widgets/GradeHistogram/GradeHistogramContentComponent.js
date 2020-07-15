@@ -102,9 +102,9 @@ class GradeHistogramContentComponent extends Component {
           // First and last buckets have alternate label format
           let label;
           if (i === 0) {
-            label = `<= ${max}`;
+            label = `Under ${max}`;
           } else if (i === numBuckets - 1) {
-            label = `>= ${min}`;
+            label = `Above ${min}`;
           } else {
             label = `${min} - ${max}`;
           }
