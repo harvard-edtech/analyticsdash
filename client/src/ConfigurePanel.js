@@ -72,9 +72,11 @@ class ConfigurePanel extends Component {
           okayColor="warning"
           onClose={(button) => {
             if (button === Modal.BUTTONS.OKAY) {
+              // Confirmed
               return onDone();
             }
 
+            // Did not confirm
             this.setState({
               confirmingCancel: false,
             });
