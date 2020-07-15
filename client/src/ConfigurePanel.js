@@ -69,13 +69,11 @@ class ConfigurePanel extends Component {
           type={Modal.TYPES.OKAY_CANCEL}
           okayLabel="Abandon Changes"
           okayColor="warning"
-          onDone={(button) => {
+          onClose={(button) => {
             if (button === Modal.BUTTONS.OKAY) {
-              // Confirmed
               return onDone();
             }
 
-            // Did not confirm
             this.setState({
               confirmingCancel: false,
             });

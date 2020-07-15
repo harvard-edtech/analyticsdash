@@ -40,7 +40,7 @@ class GradeHistogramConfigureComponent extends Component {
           aria-label="choose the number of histogram buckets"
           value={configuration.numBuckets}
           onChange={(e) => {
-            onChangeConfiguration({ numBuckets: e.target.value });
+            onChangeConfiguration({ numBuckets: Number(e.target.value) });
           }}
         >
           {options}
