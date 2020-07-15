@@ -22,6 +22,6 @@ export default {
     icon,
     title: 'Grade Stats',
     subtitle: 'Mean, median, and standard deviation for graded assignments.',
-    description: 'I really don\'t know what to say since this is a really boring tool that really does nothing of interest. You should probably just stop reading.',
+    description: 'Simple and useful statistics on student grades for assignments in the course. Also, in one click, you can share stats with students via a Canvas announcement.',
   },
 };
