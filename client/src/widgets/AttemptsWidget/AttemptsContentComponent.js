@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 /**
  * Content for the Attempts component
  * @author Aryan Pandey
