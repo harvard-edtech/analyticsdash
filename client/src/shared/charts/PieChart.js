@@ -11,6 +11,9 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
+// Import nivo chart
+import { ResponsivePie } from '@nivo/pie';
+
 class PieChart extends Component {
   /**
    * Render PieChart
