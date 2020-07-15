@@ -65,11 +65,12 @@ class ConfigurePanel extends Component {
       return (
         <Modal
           title="Abandon changes?"
+          key="abandon-modal"
           body="Are you sure you want to abandon your changes?"
           type={Modal.TYPES.OKAY_CANCEL}
           okayLabel="Abandon Changes"
           okayColor="warning"
-          onDone={(button) => {
+          onClose={(button) => {
             if (button === Modal.BUTTONS.OKAY) {
               // Confirmed
               return onDone();
@@ -97,6 +98,7 @@ class ConfigurePanel extends Component {
             <MiniWidgetTitle widget={widget} />
           </span>
         )}
+        key="configure-modal"
         type={Modal.TYPES.NO_BUTTONS_AND_BLOCKED}
         body={(
           <div>
