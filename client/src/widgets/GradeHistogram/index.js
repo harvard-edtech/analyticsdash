@@ -14,7 +14,7 @@ export default {
 
   configurable: true,
   initialConfiguration: {
-    nBuckets: 10, // number of histogram buckets
+    numBuckets: 10, // default number of histogram buckets
   },
 
   ContentComponent,

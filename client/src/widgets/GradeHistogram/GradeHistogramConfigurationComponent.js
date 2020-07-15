@@ -7,6 +7,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+// Constants
+const NUM_BUCKETS_OPTIONS = [2, 5, 10, 15, 20];
+
 /* ---------------------------- Class --------------------------- */
 
 class GradeHistogramConfigureComponent extends Component {
@@ -16,7 +19,7 @@ class GradeHistogramConfigureComponent extends Component {
       onChangeConfiguration,
     } = this.props;
 
-    const options = [2, 5, 10, 15, 20].map((n) => {
+    const options = NUM_BUCKETS_OPTIONS.map((n) => {
       return (
         <option key={n}>
           {n}
@@ -35,9 +38,9 @@ class GradeHistogramConfigureComponent extends Component {
           id="n-buckets-select"
           className="custom-select alert-dark bg-white"
           aria-label="choose the number of histogram buckets"
-          value={configuration.nBuckets}
+          value={configuration.numBuckets}
           onChange={(e) => {
-            onChangeConfiguration({ nBuckets: e.target.value });
+            onChangeConfiguration({ numBuckets: e.target.value });
           }}
         >
           {options}
@@ -48,7 +51,9 @@ class GradeHistogramConfigureComponent extends Component {
 }
 
 GradeHistogramConfigureComponent.propTypes = {
-  configuration: PropTypes.shape({ nBuckets: PropTypes.number }).isRequired,
+  // Current widget configuration
+  configuration: PropTypes.shape({ numBuckets: PropTypes.number }).isRequired,
+  // Function to call when configuration is changed
   onChangeConfiguration: PropTypes.func.isRequired,
 };
 

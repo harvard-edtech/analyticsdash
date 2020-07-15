@@ -42,7 +42,7 @@ class GradeHistogramContentComponent extends Component {
     } = this.props;
 
     const {
-      nBuckets,
+      numBuckets,
     } = configuration;
 
     // Define assignment dropdown menu
@@ -71,7 +71,7 @@ class GradeHistogramContentComponent extends Component {
 
     // Assignment was there
     if (!body) {
-      // Lookup assignment submissions
+      // Look up assignment submissions
       const subs = canvasData.listSubmissions(assignment.id);
       // Assignment has no points
       if (assignment.points_possible === 0) {
@@ -91,20 +91,35 @@ class GradeHistogramContentComponent extends Component {
         const scores = subs.map((sub) => { return sub.score; });
 
         // Determine bucket sizes
-        const bucketSize = assignment.points_possible / nBuckets;
+        const bucketSize = assignment.points_possible / numBuckets;
 
         // Collate grade data into buckets
         const histogramData = [];
-        for (let i = 0; i < nBuckets; i++) {
+        for (let i = 0; i < numBuckets; i++) {
+          const min = Number((bucketSize * i).toFixed(2));
+          const max = Number((bucketSize * (i + 1)).toFixed(2) - 0.01);
+
+          // First and last buckets have alternate label format
+          let label;
+          if (i === 0) {
+            label = `<= ${max}`;
+          } else if (i === numBuckets - 1) {
+            label = `>= ${min}`;
+          } else {
+            label = `${min} - ${max}`;
+          }
+
           histogramData.push({
-            range: `${+(bucketSize * i).toFixed(2)} - ${+(bucketSize * (i + 1)).toFixed(2)}`,
+            label,
             numSubmissions: 0,
           });
         }
         scores.forEach((score) => {
           let bucketIndex;
-          if (score === assignment.points_possible) {
-            bucketIndex = nBuckets - 1;
+          if (score >= assignment.points_possible) {
+            bucketIndex = numBuckets - 1;
+          } else if (score <= 0) {
+            bucketIndex = 0;
           } else {
             bucketIndex = Math.floor(score / bucketSize);
           }
@@ -112,10 +127,10 @@ class GradeHistogramContentComponent extends Component {
         });
 
         body = (
-          <div className="GradeHistogram-content-container">
+          <div className="GradeHistogramContentComponent-body-container">
             <ResponsiveBar
               data={histogramData}
-              indexBy="range"
+              indexBy="label"
               keys={['numSubmissions']}
               padding={0.05}
               colors={{
@@ -127,7 +142,7 @@ class GradeHistogramContentComponent extends Component {
                 bottom: 50,
                 left: 50,
               }}
-              label="range"
+              label="label"
               enableGridY
               axisLeft={{
                 legend: 'Number of Submissions',
@@ -169,7 +184,7 @@ class GradeHistogramContentComponent extends Component {
 
 GradeHistogramContentComponent.propTypes = {
   // The current configuration, which provides the number of histogram buckets
-  configuration: PropTypes.shape({ nBuckets: PropTypes.number }).isRequired,
+  configuration: PropTypes.shape({ numBuckets: PropTypes.number }).isRequired,
 };
 
 export default GradeHistogramContentComponent;
