@@ -31,7 +31,6 @@
 	},
 	"homepage": "https://github.com/harvard-edtech/coursedash#readme",
 	"dependencies": {
-		"@nivo/bar": "^0.62.0",
 		"caccl": "^1.1.25",
 		"mongodb": "^3.5.9"
 	},
