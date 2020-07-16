@@ -15,6 +15,6 @@ export default {
     icon,
     title: 'Attempts',
     subtitle: 'Attempt history for submitted assignments',
-    description: 'Shows how many attempts students used to submit an assignment',
+    description: 'Provides data on the number of submission attempts students used for each assignment.',
   },
 };

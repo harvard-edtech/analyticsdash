@@ -16,6 +16,9 @@ import LoadingSpinner from '../../shared/LoadingSpinner';
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
 
+// Import css
+import './AttemptsContentComponent.css';
+
 /* ---------------------------- Class --------------------------- */
 
 class AttemptsContentComponent extends Component {
@@ -27,9 +30,6 @@ class AttemptsContentComponent extends Component {
       // Current assignment
       assignment: null,
     };
-
-    // Load students
-    this.numStudents = getCanvasData().listStudents().length;
   }
 
   /**
@@ -41,35 +41,8 @@ class AttemptsContentComponent extends Component {
       assignment,
     } = this.state;
 
-    const { numStudents } = this;
-
-    // Initialize empty buckets for bar chart
-    const data = [
-      {
-        attempts: 'No Submissions',
-        students: 0,
-      },
-      {
-        attempts: '1',
-        students: 0,
-      },
-      {
-        attempts: '2',
-        students: 0,
-      },
-      {
-        attempts: '3',
-        students: 0,
-      },
-      {
-        attempts: '4',
-        students: 0,
-      },
-      {
-        attempts: '4+',
-        students: 0,
-      },
-    ];
+    // Load students
+    const totalStudents = getCanvasData().listStudents().length;
 
     /* ------------------------ Assignment Dropdown ------------------------ */
 
@@ -84,94 +57,175 @@ class AttemptsContentComponent extends Component {
       />
     );
 
-    if (numStudents && assignment) {
+    /* ---------------------------- -Bar Chart- ---------------------------- */
+    let data;
+
+    if (totalStudents && assignment) {
+      // Initialize empty buckets for bar chart
+      data = [
+        {
+          attempts: '0 (Didn\'t Submit)',
+          // Initialize no submissions bucket to total students at start
+          // number gets decremented when attempts are added
+          numStudents: totalStudents,
+        },
+        {
+          attempts: '1',
+          numStudents: 0,
+        },
+        {
+          attempts: '2',
+          numStudents: 0,
+        },
+        {
+          attempts: '3',
+          numStudents: 0,
+        },
+        {
+          attempts: '4',
+          numStudents: 0,
+        },
+        {
+          attempts: '5+',
+          numStudents: 0,
+        },
+      ];
+
+      // Fill bar chart with attempts data
       const submissionsList = getCanvasData().listSubmissions(assignment.id);
 
       submissionsList.forEach((value) => {
         // extract attempts data
         const { attempt } = value;
-        if (attempt > 4) {
-          data[4].students += 1;
+
+        // If number of attempts exceeds num buckets, group all into last bucket
+        if (attempt >= data.length) {
+          data[data.length - 1].numStudents += 1;
+          // Decrement no submissions bucket
+          data[0].numStudents -= 1;
+          return;
         }
-        data[attempt].students += 1;
+        data[attempt].numStudents += 1;
+        // Decrement no submissions bucket
+        // If attempt is 0, it cancels out
+        data[0].numStudents -= 1;
       });
     }
 
-    // custtom tooltip that appears on hover
+    /**
+     * custom tooltip function that appears on hover
+     * @author {Aryan Pandey}
+     * @param {object} args - object containing all arguments
+     * @param {string | number} args.id - id of bar being hovered over
+     * @param {number} args.value - value of bar being hovered over
+     * @param {number} args.index - index of bar being hovered over
+     * @param {string | number} args.indexValue - index value of the bar
+     *   being hovered over
+     * @param {string} args.color - color of bar being hovered over
+     * @param {object} args.data - object containing raw data associated
+     *   with current index
+     * @returns {node} html div of the custom tooltip
+     */
     const customTooltip = (args) => {
-      const percentage = ((args.value / numStudents) * 100).toFixed(2);
+      const percentage = ((args.value / totalStudents) * 100).toFixed(2);
       return (
         <div>
-          <strong>{args.value} </strong>
-          students ( <strong> {percentage}% </strong> ) used {args.index} attempt(s)
+          <strong>
+            {args.value}
+            {' '}
+          </strong>
+          students (
+          {' '}
+          <strong>
+            {' '}
+            {percentage}
+            %
+            {' '}
+          </strong>
+          {' '}
+          )
         </div>
       );
     };
-    const getColor = (bar) => { return bar.indexValue === 'No Submissions' ? '#DCDCDC' : '#03A9F3'; };
+
+    /**
+     * returns desired color for respective bars
+     * @author {Aryan Pandey}
+     * @param {object} barObj - object containing all arguments
+     * @param {string | number} barObj.id - id of bar
+     * @param {number} barObj.value - value of bar
+     * @param {number} barObj.index - index of bar
+     * @param {string | number} barObj.indexValue - index value of the bar
+     * @param {object} barObj.data - object containing raw data associated
+     *   with bar
+     * @returns {string} desired color of the bar
+     */
+    const getColor = (barObj) => { return (barObj.index === 0 ? '#DCDCDC' : '#03A9F3'); };
 
     // initialize the bar chart
-    const bar = (
-      <ResponsiveBar
-        data={data}
-        keys={['students']}
-        indexBy="attempts"
-
-        margin={{
-          top: 20, right: 80, bottom: 50, left: 80,
-        }}
-        padding={0.3}
-        colors={getColor}
-        maxValue={numStudents}
-        borderColor={{
-          from: 'color',
-          modifiers: [
-            ['darker', 0.6],
-          ],
-        }}
-        borderRadius={1}
-        axisLeft={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: 'Students',
-          legendPosition: 'middle',
-          legendOffset: -60,
-        }}
-        axisBottom={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: 'Attempts',
-          legendPosition: 'middle',
-          legendOffset: 40,
-        }}
-        borderWidth={1}
-        labelSkipHeight={12}
-        theme={{
-          fontSize: 12,
-          axis: {
-            ticks: {
-              text: {
-                fill: '#aaaaaa',
+    const barChart = (
+      <div className="AttemptsContentComponent-body-container">
+        <ResponsiveBar
+          data={data}
+          keys={['numStudents']}
+          indexBy="attempts"
+          margin={{
+            top: 20, right: 80, bottom: 50, left: 80,
+          }}
+          padding={0.3}
+          colors={getColor}
+          maxValue={totalStudents}
+          borderColor={{
+            from: 'color',
+            modifiers: [
+              ['darker', 0.6],
+            ],
+          }}
+          borderRadius={1}
+          axisLeft={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Students',
+            legendPosition: 'middle',
+            legendOffset: -60,
+          }}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: 'Attempts',
+            legendPosition: 'middle',
+            legendOffset: 40,
+          }}
+          borderWidth={1}
+          labelSkipHeight={12}
+          theme={{
+            fontSize: 12,
+            axis: {
+              ticks: {
+                text: {
+                  fill: '#aaaaaa',
+                },
+              },
+              legend: {
+                text: {
+                  fill: '#333333',
+                  fontSize: '20px',
+                },
               },
             },
-            legend: {
-              text: {
-                fill: '#333333',
-                fontSize: '20px',
-              },
-            },
-          },
-        }}
-        labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-        animate
-        motionStiffness={90}
-        motionDamping={15}
-        tooltip={customTooltip}
-      />
+          }}
+          labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+          animate
+          motionStiffness={90}
+          motionDamping={15}
+          tooltip={customTooltip}
+        />
+      </div>
     );
 
-    /* ---------------------------- Body ---------------------------- */
+    /* -------------------------------- Body ------------------------------- */
 
     let body;
 
@@ -181,16 +235,15 @@ class AttemptsContentComponent extends Component {
         <LoadingSpinner />
       );
     }
-
-    /* ----------------------- Create Full UI ----------------------- */
+    if (!body) {
+      body = barChart;
+    }
+    /* --------------------------- Create Full UI -------------------------- */
 
     return (
       <div>
         {assignmentDropdown}
         {body}
-        <div style={{ width: '100%', height: '500px', paddingBottom: '10px' }}>
-          {bar}
-        </div>
       </div>
     );
   }

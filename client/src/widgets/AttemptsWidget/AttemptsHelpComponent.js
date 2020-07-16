@@ -15,9 +15,10 @@ class AttemptsHelpComponent extends Component {
    */
   render() {
     return (
-      <h4>
-        THIS SECTION IS A WORK IN PROGRESS!!! <br />
-      </h4>
+      <div>
+        This widget provides a bar chart representing the number of attempts
+        students used to submit an assignment.
+      </div>
     );
   }
 }
