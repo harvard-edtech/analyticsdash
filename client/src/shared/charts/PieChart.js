@@ -1,6 +1,7 @@
 /**
  * Pie chart displayed as a doughnut chart
  * @author Gabe Abrams
+ * @author Grace Whitney
  */
 
 // Import React
@@ -14,15 +15,36 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 // Import nivo chart
 import { ResponsivePie } from '@nivo/pie';
 
+// Import color themes
+// import THEMES from './style/THEMES';
+
 class PieChart extends Component {
   /**
    * Render PieChart
-   * @author Gabe Abrams
+   * @author Grace Whitney
    */
   render() {
+    const {
+      title,
+      segments,
+      seriesLabelType,
+      showSegmentValues,
+      tooltipFormatter,
+    } = this.props;
+
+    const chartData = segments.map((segment) => {
+      return {
+        id: segment.label,
+        value: segment.value,
+      };
+    });
+
     return (
-      <div>
-        PieChart still being build!
+      <div style={{ height: 500 }}>
+        <ResponsivePie
+          title={title}
+          data={chartData}
+        />
       </div>
     );
   }
