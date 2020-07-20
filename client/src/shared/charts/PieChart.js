@@ -18,6 +18,11 @@ import { ResponsivePie } from '@nivo/pie';
 // Import color themes
 // import THEMES from './style/THEMES';
 
+// Style constants
+const PAD_ANGLE = 0.5;
+const CORNER_RADIUS = 2;
+const BORDER_WIDTH = 1;
+
 class PieChart extends Component {
   /**
    * Render PieChart
@@ -32,6 +37,7 @@ class PieChart extends Component {
       tooltipFormatter,
     } = this.props;
 
+    // Convert segment data to required format
     const chartData = segments.map((segment) => {
       return {
         id: segment.label,
@@ -39,11 +45,77 @@ class PieChart extends Component {
       };
     });
 
+    // Convert tooltip formatter to segment data fields
+    let chartTooltipFormatter;
+    if (tooltipFormatter) {
+      chartTooltipFormatter = (segment) => {
+        return (
+          tooltipFormatter({
+            label: segment.id,
+            value: segment.value,
+          })
+        );
+      };
+    }
+
+    // Determine label prop values
+    const enableOuterLabels = seriesLabelType === 'outer';
+    const enableInnerLabels = (
+      seriesLabelType === 'inner'
+      || (seriesLabelType === 'legend' && showSegmentValues)
+    );
+
+    // Define segment label function
+    const formatSegmentLabel = (segment) => {
+      const id = (seriesLabelType === 'legend' ? '' : segment.id);
+      const value = (showSegmentValues ? `(${segment.value})` : '');
+      return (
+        `${id} ${value}`
+      );
+    };
+
+    // Set up legend if specified
+    const legends = [];
+    if (seriesLabelType === 'legend') {
+      legends.push({
+        anchor: 'bottom',
+        direction: 'row',
+        translateY: 45,
+        translateX: 10,
+        itemWidth: 100,
+        itemHeight: 20,
+        itemTextColor: '#000',
+        symbolSize: 20,
+        symbolShape: 'circle',
+      });
+    }
+
     return (
       <div style={{ height: 500 }}>
+        {title}
         <ResponsivePie
-          title={title}
           data={chartData}
+
+          innerRadius={0.5}
+          padAngle={PAD_ANGLE}
+          cornerRadius={CORNER_RADIUS}
+          margin={{
+            top: 30,
+            bottom: 80,
+            left: 20,
+            right: 20,
+          }}
+          borderWidth={BORDER_WIDTH}
+
+          enableRadialLabels={enableOuterLabels}
+          radialLabel={formatSegmentLabel}
+
+          enableSlicesLabels={enableInnerLabels}
+          sliceLabel={formatSegmentLabel}
+
+          legends={legends}
+
+          tooltip={chartTooltipFormatter}
         />
       </div>
     );
@@ -70,7 +142,7 @@ PieChart.propTypes = {
   showSegmentValues: PropTypes.bool,
   /**
    * Tooltip formatter
-   * @param {number} value - the value of the bar series item
+   * @param {number} value - the value of the pie segment
    * @param {string} label - the label of the segment
    * @return {node} valid html element
    */
