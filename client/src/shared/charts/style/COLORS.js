@@ -5,33 +5,33 @@
  */
 export default {
   BLUE: {
-    // TODO: define this def
+    background: '114EB6',
   },
   ORANGE: {
-    // TODO: define this def
+    background: 'F42A61',
   },
   PURPLE: {
-    // TODO: define this def
+    background: '720C99',
   },
   GREEN: {
-    // TODO: define this def
+    background: '1B791F',
   },
   LIGHT_BLUE: {
-    // TODO: define this def
+    background: '5CD1FA',
   },
   RED: {
-    // TODO: define this def
+    background: 'DA4949',
   },
   YELLOW: {
-    // TODO: define this def
+    background: 'FF1E8C',
   },
   PINK: {
-    // TODO: define this def
+    background: 'DD91B7',
   },
   TURQUOISE: {
-    // TODO: define this def
+    background: '00CDE1',
   },
   LIGHT_GREEN: {
-    // TODO: define this def
+    background: 'B4A9E9',
   },
 };
