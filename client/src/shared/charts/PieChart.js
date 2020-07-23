@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 
 // Import FontAwesome Icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 
 // Import nivo chart
 import { ResponsivePie } from '@nivo/pie';
@@ -18,10 +18,14 @@ import { ResponsivePie } from '@nivo/pie';
 // Import color themes
 // import THEMES from './style/THEMES';
 
+// Import style
+import './PieChart.css';
+
 // Style constants
 const PAD_ANGLE = 0.5;
 const CORNER_RADIUS = 2;
 const BORDER_WIDTH = 1;
+const INNER_RADIUS = 0.55;
 
 class PieChart extends Component {
   /**
@@ -91,12 +95,17 @@ class PieChart extends Component {
     }
 
     return (
-      <div style={{ height: 500 }}>
-        {title}
+      <div className="PieChart-body-container">
+        <div>
+          {title}
+          <FontAwesomeIcon
+            icon={faCloudDownloadAlt}
+          />
+        </div>
         <ResponsivePie
           data={chartData}
 
-          innerRadius={0.5}
+          innerRadius={INNER_RADIUS}
           padAngle={PAD_ANGLE}
           cornerRadius={CORNER_RADIUS}
           margin={{
