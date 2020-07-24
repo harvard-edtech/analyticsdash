@@ -34,7 +34,7 @@ export default (colorMap = {}, theme = THEMES.NORMAL) => {
       return colorMap[id];
     }
 
-    // Choose the next random color
+    // Choose the next color
     const color = allChartColors[nextColorIndex % allChartColors.length];
 
     // Increment the next color index
