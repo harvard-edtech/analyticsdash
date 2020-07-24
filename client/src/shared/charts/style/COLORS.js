@@ -5,33 +5,36 @@
  */
 export default {
   BLUE: {
-    background: '114EB6',
+    background: '33A0E4',
   },
   ORANGE: {
-    background: 'F42A61',
+    background: 'F39A27',
   },
   PURPLE: {
-    background: '720C99',
+    background: 'A981D4',
   },
   GREEN: {
-    background: '1B791F',
+    background: '33B16D',
   },
   LIGHT_BLUE: {
-    background: '5CD1FA',
+    background: 'B6E9F9',
   },
   RED: {
-    background: 'DA4949',
+    background: 'F0454F',
   },
   YELLOW: {
-    background: 'FF1E8C',
+    background: 'FFF771',
   },
   PINK: {
-    background: 'DD91B7',
+    background: 'FFD1E9',
   },
   TURQUOISE: {
     background: '00CDE1',
   },
   LIGHT_GREEN: {
-    background: 'B4A9E9',
+    background: 'B4E9A9',
   },
+  GRAY: {
+    background: 'DADEE3',
+  }
 };
