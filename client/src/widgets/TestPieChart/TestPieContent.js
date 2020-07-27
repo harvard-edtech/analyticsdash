@@ -31,6 +31,18 @@ class PieChartContent extends Component {
             label: 'Pineapple',
             value: 40,
           },
+          {
+            label: 'Peach',
+            value: 22,
+          },
+          {
+            label: 'Strawberry',
+            value: 50,
+          },
+          {
+            label: 'Apricot',
+            value: 31,
+          },
         ]}
         seriesLabelType="outer"
         showSegmentValues

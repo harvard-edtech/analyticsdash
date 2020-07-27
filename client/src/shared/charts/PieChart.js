@@ -15,8 +15,10 @@ import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
 // Import nivo chart
 import { ResponsivePie } from '@nivo/pie';
 
-// Import color themes
-// import THEMES from './style/THEMES';
+// Import color definitions
+import genDefs from './style/genDefs';
+
+// Import local components
 
 // Import style
 import './PieChart.css';
@@ -36,6 +38,8 @@ class PieChart extends Component {
     const {
       title,
       segments,
+      theme,
+      colorMap,
       seriesLabelType,
       showSegmentValues,
       tooltipFormatter,
@@ -94,6 +98,12 @@ class PieChart extends Component {
       });
     }
 
+    // Get color definitions
+    const chartGenDefs = genDefs(colorMap, theme);
+    const { defs, fill } = chartGenDefs(
+      chartData.map((segment) => { return segment.id; })
+    );
+
     return (
       <div className="PieChart-body-container">
         <div>
@@ -104,6 +114,9 @@ class PieChart extends Component {
         </div>
         <ResponsivePie
           data={chartData}
+
+          defs={defs}
+          fill={fill}
 
           innerRadius={INNER_RADIUS}
           padAngle={PAD_ANGLE}
@@ -141,6 +154,10 @@ PieChart.propTypes = {
     // The value for the segment
     value: PropTypes.number,
   })).isRequired,
+  // Color theme
+  theme: PropTypes.string,
+  // Color map for specific segment id to color mapping
+  colorMap: PropTypes.object,
   // Segment label type
   seriesLabelType: PropTypes.oneOf([
     'legend', // Show a legend
@@ -159,6 +176,10 @@ PieChart.propTypes = {
 };
 
 PieChart.defaultProps = {
+  // Default theme
+  theme: undefined,
+  // No colorMap
+  colorMap: {},
   // Outside the segments
   seriesLabelType: 'outer',
   // Values hidden
