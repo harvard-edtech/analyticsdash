@@ -46,6 +46,7 @@ export default (colorMap = {}, theme = THEMES.NORMAL) => {
 
   /**
    * Generate the defs and fill object arrays for a chart
+   * @author Grace Whitney
    * @param  {string[]} ids - an array of the series ids to generate defs and
    *   fill arrays for
    * @return {object} - an object that contains the defs and fill arrays for the
