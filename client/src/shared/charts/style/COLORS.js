@@ -83,7 +83,7 @@ export default {
   GRAY: {
     id: 'gray',
     background: 'DADEE3',
-    color: 'CCCCCC',
+    color: '#CCCCCC',
     type: 'patternDots',
     size: 8,
     padding: 3,
