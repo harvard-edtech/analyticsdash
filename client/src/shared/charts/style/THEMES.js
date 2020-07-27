@@ -1,16 +1,39 @@
+import COLORS from './COLORS';
+
 /**
- * List of themes (array of pairs of colors and textures)
+ * Set of color themes based on colors in COLORS.js
+ * @author Aryan Pandey
+ * @author Grace Whitney
  */
 export default {
-  default: [
-    {
-      color: 'red',
-      texture: 'dots',
-    },
-    ...
+  // The default color theme
+  NORMAL: [
+    COLORS.BLUE,
+    COLORS.ORANGE,
+    COLORS.PURPLE,
+    COLORS.GREEN,
+    COLORS.LIGHT_BLUE,
+    COLORS.RED,
+    COLORS.YELLOW,
+    COLORS.PINK,
+    COLORS.TURQUOISE,
+    COLORS.LIGHT_GREEN,
   ],
-  'good-bad': [
-    ...
+  // Set of nice/good/pleasant colors
+  PLEASANT: [
+    COLORS.BLUE,
+    COLORS.PURPLE,
+    COLORS.GREEN,
+    COLORS.LIGHT_BLUE,
+    COLORS.TURQUOISE,
+    COLORS.LIGHT_GREEN,
   ],
-  ...
+  // Set of unpleasant/bad colors
+  UNPLEASANT: [
+    COLORS.ORANGE,
+    COLORS.PURPLE,
+    COLORS.RED,
+    COLORS.YELLOW,
+    COLORS.PINK,
+  ],
 };
