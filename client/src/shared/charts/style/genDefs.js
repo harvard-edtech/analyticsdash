@@ -22,13 +22,13 @@ export default (colorMap = {}, theme = THEMES.NORMAL) => {
   });
 
   /**
-   * Get the color def for a series
+   * Get the color def for a series id
    * @author Gabe Abrams
    * @param {string} [id] - the id of the series
    * @return {object} the color def for this series, or just the next color in
    *   the sequence if no id is provided
    */
-  return (id) => {
+  const genDef = (id) => {
     // If the id is in the colorMap, return that def
     if (colorMap[id]) {
       return colorMap[id];
@@ -42,5 +42,31 @@ export default (colorMap = {}, theme = THEMES.NORMAL) => {
 
     // Return the color
     return color;
+  };
+
+  /**
+   * Generate the defs and fill object arrays for a chart
+   * @param  {string[]} ids - an array of the series ids to generate defs and
+   *   fill arrays for
+   * @return {object} - an object that contains the defs and fill arrays for the
+   *   specified series ids
+   */
+  return (ids) => {
+    const defs = [];
+    const fill = [];
+
+    // Add def and fill objects for each id
+    ids.forEach((id) => {
+      const colorDef = genDef(id);
+      defs.push(colorDef);
+      fill.push({
+        match: {
+          id,
+        },
+        id: colorDef.id,
+      });
+    });
+
+    return ({ defs, fill });
   };
 };
