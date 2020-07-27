@@ -82,7 +82,7 @@ export default {
   },
   GRAY: {
     id: 'gray',
-    background: 'DADEE3',
+    background: '#DADEE3',
     color: '#CCCCCC',
     type: 'patternDots',
     size: 8,
