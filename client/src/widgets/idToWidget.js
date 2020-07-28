@@ -1,4 +1,5 @@
 import GradeStats from './GradeStats';
+import AttemptsWidget from './AttemptsWidget';
 import GradeHistogram from './GradeHistogram';
 
 // Import helpers
@@ -7,6 +8,7 @@ import preprocessWidget from '../helpers/preprocessWidget';
 // Put all widgets in a list
 const widgetList = [
   GradeStats,
+  AttemptsWidget,
   GradeHistogram,
 ];
 
