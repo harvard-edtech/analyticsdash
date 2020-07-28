@@ -43,8 +43,20 @@ class PieChartContent extends Component {
             label: 'Apricot',
             value: 31,
           },
+          {
+            label: 'Pomegranate',
+            value: 10,
+          },
+          {
+            label: 'Kiwi',
+            value: 20,
+          },
+          {
+            label: 'Banana',
+            value: 30,
+          },
         ]}
-        seriesLabelType="inner"
+        seriesLabelType="outer"
         showSegmentValues
         tooltipFormatter={(segment) => {
           return (`${segment.label}: ${segment.value} students`);

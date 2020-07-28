@@ -72,7 +72,7 @@ class PieChart extends Component {
     const formatInnerLabel = (segment) => {
       const id = (seriesLabelType !== 'inner' ? '' : segment.id);
       const value = (showSegmentValues ? `(${segment.value})` : '');
-      const buffer = (id !== '' && value !== '' ? '\n' : '');
+      const buffer = (id !== '' && value !== '' ? ' ' : '');
       return (`${id}${buffer}${value}`);
     };
 
