@@ -49,8 +49,8 @@ export default {
   },
   RED: {
     id: 'red',
-    background: '#F0454F',
-    color: '#BD0F1B',
+    background: '#B20000',
+    color: '#7A0002',
     type: 'patternSquares',
     size: 8,
     padding: 8,
