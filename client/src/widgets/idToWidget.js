@@ -1,6 +1,6 @@
 import GradeStats from './GradeStats';
-import SmartyWidget from './SmartyWidget';
 import AttemptsWidget from './AttemptsWidget';
+import GradeHistogram from './GradeHistogram';
 
 // Import helpers
 import preprocessWidget from '../helpers/preprocessWidget';
@@ -8,8 +8,8 @@ import preprocessWidget from '../helpers/preprocessWidget';
 // Put all widgets in a list
 const widgetList = [
   GradeStats,
-  SmartyWidget,
   AttemptsWidget,
+  GradeHistogram,
 ];
 
 // Convert to map

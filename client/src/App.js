@@ -508,10 +508,14 @@ class App extends Component {
       body = (
         <WidgetStore
           installedWidgetIds={widgetOrder}
-          onAddWidget={(id) => {
+          onAddWidget={async (id) => {
             // Check if no configuration needed
             if (!idToWidget[id].configureOnAdd) {
-              // Nothing to do! Just add it to the list
+              // Add it to the list with its initial configuration
+              await this.onChangeConfiguration(
+                id,
+                idToWidget[id].initialConfiguration
+              );
               return this.addWidget(id);
             }
 
