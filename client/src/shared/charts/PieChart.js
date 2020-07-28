@@ -64,18 +64,16 @@ class PieChart extends Component {
 
     // Determine label prop values
     const enableOuterLabels = seriesLabelType === 'outer';
-    const enableInnerLabels = (
-      seriesLabelType === 'inner'
-      || (seriesLabelType === 'legend' && showSegmentValues)
-    );
+    const enableInnerLabels = seriesLabelType === 'inner' || showSegmentValues;
 
-    // Define segment label function
-    const formatSegmentLabel = (segment) => {
-      const id = (seriesLabelType === 'legend' ? '' : segment.id);
+    // Define segment label functions
+    const formatOuterLabel = (segment) => { return `${segment.id}`; };
+
+    const formatInnerLabel = (segment) => {
+      const id = (seriesLabelType !== 'inner' ? '' : segment.id);
       const value = (showSegmentValues ? `(${segment.value})` : '');
-      return (
-        `${id} ${value}`
-      );
+      const buffer = (id !== '' && value !== '' ? '\n' : '');
+      return (`${id}${buffer}${value}`);
     };
 
     // Set up legend if specified
@@ -102,9 +100,9 @@ class PieChart extends Component {
 
     return (
       <div className="PieChart-body-container">
-        <div>
+        <h3 className="flex-grow-1 text-center">
           {title}
-        </div>
+        </h3>
         <ResponsivePie
           data={chartData}
 
@@ -123,10 +121,10 @@ class PieChart extends Component {
           borderWidth={BORDER_WIDTH}
 
           enableRadialLabels={enableOuterLabels}
-          radialLabel={formatSegmentLabel}
+          radialLabel={formatOuterLabel}
 
           enableSlicesLabels={enableInnerLabels}
-          sliceLabel={formatSegmentLabel}
+          sliceLabel={formatInnerLabel}
 
           legends={legends}
 

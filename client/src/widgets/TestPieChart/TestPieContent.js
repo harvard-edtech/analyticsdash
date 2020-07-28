@@ -44,7 +44,7 @@ class PieChartContent extends Component {
             value: 31,
           },
         ]}
-        seriesLabelType="outer"
+        seriesLabelType="inner"
         showSegmentValues
         tooltipFormatter={(segment) => {
           return (`${segment.label}: ${segment.value} students`);
