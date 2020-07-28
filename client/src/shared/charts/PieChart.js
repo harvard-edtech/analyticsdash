@@ -8,10 +8,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// Import FontAwesome Icons
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons';
-
 // Import nivo chart
 import { ResponsivePie } from '@nivo/pie';
 
@@ -27,7 +23,7 @@ import './PieChart.css';
 const PAD_ANGLE = 0.5;
 const CORNER_RADIUS = 2;
 const BORDER_WIDTH = 1;
-const INNER_RADIUS = 0.55;
+const INNER_RADIUS = 0.5;
 
 class PieChart extends Component {
   /**
@@ -108,9 +104,6 @@ class PieChart extends Component {
       <div className="PieChart-body-container">
         <div>
           {title}
-          <FontAwesomeIcon
-            icon={faCloudDownloadAlt}
-          />
         </div>
         <ResponsivePie
           data={chartData}
@@ -156,8 +149,8 @@ PieChart.propTypes = {
   })).isRequired,
   // Color theme
   theme: PropTypes.string,
-  // Color map for specific segment id to color mapping
-  colorMap: PropTypes.object,
+  // Color map of ids to color
+  colorMap: PropTypes.objectOf(PropTypes.any),
   // Segment label type
   seriesLabelType: PropTypes.oneOf([
     'legend', // Show a legend
