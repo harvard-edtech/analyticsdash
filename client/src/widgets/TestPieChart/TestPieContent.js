@@ -12,7 +12,6 @@ import PieChart from '../../shared/charts/PieChart';
 class PieChartContent extends Component {
   render() {
     return (
-      <div style={{ height: 800 }}>
       <PieChart
         segments={[
           {
