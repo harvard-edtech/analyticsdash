@@ -12,8 +12,8 @@ import PieChart from '../../shared/charts/PieChart';
 class PieChartContent extends Component {
   render() {
     return (
+      <div style={{ height: 800 }}>
       <PieChart
-        title="Test Pie Chart"
         segments={[
           {
             label: 'Apple',
@@ -56,12 +56,10 @@ class PieChartContent extends Component {
             value: 30,
           },
         ]}
-        seriesLabelType="outer"
-        showSegmentValues
-        tooltipFormatter={(segment) => {
-          return (`${segment.label}: ${segment.value} students`);
-        }}
+        showSegmentLabels
+        showLegend
       />
+      </div>
     );
   }
 }
