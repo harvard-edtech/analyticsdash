@@ -1,7 +1,6 @@
 import GradeStats from './GradeStats';
 import AttemptsWidget from './AttemptsWidget';
 import GradeHistogram from './GradeHistogram';
-import TestPieChart from './TestPieChart';
 
 // Import helpers
 import preprocessWidget from '../helpers/preprocessWidget';
