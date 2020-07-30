@@ -261,64 +261,68 @@ class BarChart extends Component {
 
     /* ------------------------- Build Bar Component ------------------------ */
 
+    const responsiveBarProps = {
+      data,
+      keys,
+      margin,
+      layout,
+      padding,
+      minValue,
+      maxValue,
+      axisLeft,
+      axisBottom,
+      legends,
+      indexBy: barAxisLabel,
+      enableGridX: horizontal,
+      enableGridY: !horizontal,
+      width: chartWidth,
+      height: chartHeight,
+      // TODO: add in color scheme from THEMES.JS
+      colors: ['#33A0E4', '#F39A27', '#A981D4', '#33B16D', '#F0454F', '#B6E9F9', '#FFF771', '#FFD1E9', '#00CDE1', '#DADEE3'],
+      borderColor: {
+        from: 'color',
+        modifiers: [
+          ['darker', 0.6],
+        ],
+      },
+      borderRadius: 1,
+      borderWidth: 1,
+      labelSkipHeight: 12,
+      labelSkipWidth: 13,
+      theme: {
+        fontSize: 12,
+        outlineWidth: 22,
+        axis: {
+          ticks: {
+            text: {
+              fill: '#aaaaaa',
+              fontSize: 12,
+            },
+          },
+          legend: {
+            text: {
+              fill: '#aaaaaa',
+              fontSize: 20,
+            },
+          },
+        },
+      },
+      // defs: defs}
+      // fill: fill}
+      labelTextColor: { from: 'color', modifiers: [['darker', 1.6]] },
+      animate: true,
+      motionStiffness: 90,
+      motionDamping: 15,
+      tooltip: tooltipFormatter,
+    };
+
     return (
       // Return Bar component wrapped in div
+      /* eslint-disable react/jsx-props-no-spreading */
       <div style={{ height: '570px', overflowX: 'auto' }}>
         <h2>{title}</h2>
         <ResponsiveBar
-          data={data}
-          keys={keys}
-          indexBy={barAxisLabel}
-          margin={margin}
-          layout={layout}
-          enableGridX={horizontal}
-          enableGridY={!horizontal}
-          // TODO: Find a way to conditionally send width and height props
-          width={chartWidth}
-          height={chartHeight}
-          padding={padding}
-          // TODO: add in color scheme from THEMES.JS
-          colors={['#33A0E4', '#F39A27', '#A981D4', '#33B16D', '#F0454F', '#B6E9F9', '#FFF771', '#FFD1E9', '#00CDE1', '#DADEE3']}
-          minValue={minValue}
-          maxValue={maxValue}
-          borderColor={{
-            from: 'color',
-            modifiers: [
-              ['darker', 0.6],
-            ],
-          }}
-          borderRadius={1}
-          axisLeft={axisLeft}
-          axisBottom={axisBottom}
-          borderWidth={1}
-          labelSkipHeight={12}
-          labelSkipWidth={13}
-          theme={{
-            fontSize: 12,
-            outlineWidth: 22,
-            axis: {
-              ticks: {
-                text: {
-                  fill: '#aaaaaa',
-                  fontSize: 12,
-                },
-              },
-              legend: {
-                text: {
-                  fill: '#aaaaaa',
-                  fontSize: 20,
-                },
-              },
-            },
-          }}
-          // defs={defs}
-          // fill={fill}
-          labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-          animate
-          motionStiffness={90}
-          motionDamping={15}
-          tooltip={tooltipFormatter}
-          legends={legends}
+          {...responsiveBarProps}
         />
       </div>
     );
