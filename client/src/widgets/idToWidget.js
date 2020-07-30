@@ -11,7 +11,6 @@ const widgetList = [
   GradeStats,
   AttemptsWidget,
   GradeHistogram,
-  TestPieChart,
 ];
 
 // Convert to map
