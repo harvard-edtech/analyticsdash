@@ -316,14 +316,26 @@ class BarChart extends Component {
       tooltip: tooltipFormatter,
     };
 
+    if (autoSizeOff) {
+      delete responsiveBarProps.width;
+      delete responsiveBarProps.height;
+    }
+
+    if (horizontal) {
+      delete responsiveBarProps.width;
+    } else {
+      delete delete responsiveBarProps.height;
+    }
     return (
       // Return Bar component wrapped in div
       /* eslint-disable react/jsx-props-no-spreading */
-      <div style={{ height: '570px', overflowX: 'auto' }}>
+      <div>
         <h2>{title}</h2>
-        <ResponsiveBar
-          {...responsiveBarProps}
-        />
+        <div style={{ height: '500px', overflowX: 'auto' }}>
+          <ResponsiveBar
+            {...responsiveBarProps}
+          />
+        </div>
       </div>
     );
   }
