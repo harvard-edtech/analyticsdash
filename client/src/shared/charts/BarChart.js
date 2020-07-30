@@ -213,8 +213,6 @@ class BarChart extends Component {
 
     /* ------------------------- Orientation ------------------------ */
 
-    // TODO: Fix horizontal layout styling and resizing
-
     // boolean that sets horizontal or vertical flag
     const layout = (horizontal ? 'horizontal' : 'vertical');
 
