@@ -14,8 +14,6 @@ import { ResponsivePie } from '@nivo/pie';
 // Import color definitions
 import genDefs from './style/genDefs';
 
-// Import local components
-
 // Import style
 import './PieChart.css';
 
@@ -32,12 +30,11 @@ class PieChart extends Component {
    */
   render() {
     const {
-      title,
       segments,
       theme,
       colorMap,
-      seriesLabelType,
-      showSegmentValues,
+      showSegmentLabels,
+      showLegend,
       tooltipFormatter,
     } = this.props;
 
@@ -62,23 +59,12 @@ class PieChart extends Component {
       };
     }
 
-    // Determine label prop values
-    const enableOuterLabels = seriesLabelType === 'outer';
-    const enableInnerLabels = seriesLabelType === 'inner' || showSegmentValues;
-
-    // Define segment label functions
-    const formatOuterLabel = (segment) => { return `${segment.id}`; };
-
-    const formatInnerLabel = (segment) => {
-      const id = (seriesLabelType !== 'inner' ? '' : segment.id);
-      const value = (showSegmentValues ? `(${segment.value})` : '');
-      const buffer = (id !== '' && value !== '' ? ' ' : '');
-      return (`${id}${buffer}${value}`);
-    };
+    // Define segment label function
+    const formatSegmentLabel = (segment) => { return `${segment.id}`; };
 
     // Set up legend if specified
     const legends = [];
-    if (seriesLabelType === 'legend') {
+    if (showLegend) {
       legends.push({
         anchor: 'bottom',
         direction: 'row',
@@ -100,9 +86,6 @@ class PieChart extends Component {
 
     return (
       <div className="PieChart-body-container">
-        <h3 className="flex-grow-1 text-center">
-          {title}
-        </h3>
         <ResponsivePie
           data={chartData}
 
@@ -120,11 +103,10 @@ class PieChart extends Component {
           }}
           borderWidth={BORDER_WIDTH}
 
-          enableRadialLabels={enableOuterLabels}
-          radialLabel={formatOuterLabel}
+          enableRadialLabels={showSegmentLabels}
+          radialLabel={formatSegmentLabel}
 
-          enableSlicesLabels={enableInnerLabels}
-          sliceLabel={formatInnerLabel}
+          enableSlicesLabels={false}
 
           legends={legends}
 
@@ -136,8 +118,6 @@ class PieChart extends Component {
 }
 
 PieChart.propTypes = {
-  // Title of the chart
-  title: PropTypes.string.isRequired,
   // Segment data
   segments: PropTypes.arrayOf(PropTypes.shape({
     // Label of the segment
@@ -150,13 +130,9 @@ PieChart.propTypes = {
   // Color map of ids to color
   colorMap: PropTypes.objectOf(PropTypes.any),
   // Segment label type
-  seriesLabelType: PropTypes.oneOf([
-    'legend', // Show a legend
-    'inner', // Show labels inside the segments
-    'outer', // Show labels outside the segments
-  ]),
+  showSegmentLabels: PropTypes.bool,
   // True to show segment values
-  showSegmentValues: PropTypes.bool,
+  showLegend: PropTypes.bool,
   /**
    * Tooltip formatter
    * @param {number} value - the value of the pie segment
@@ -171,10 +147,10 @@ PieChart.defaultProps = {
   theme: undefined,
   // No colorMap
   colorMap: {},
-  // Outside the segments
-  seriesLabelType: 'outer',
-  // Values hidden
-  showSegmentValues: false,
+  // Segment labels hidden
+  showSegmentLabels: false,
+  // Legend hidden
+  showLegend: false,
   // No tooltip formatter
   tooltipFormatter: undefined,
 };
