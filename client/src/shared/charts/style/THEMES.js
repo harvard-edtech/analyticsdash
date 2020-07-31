@@ -24,16 +24,11 @@ export default {
     COLORS.BLUE,
     COLORS.PURPLE,
     COLORS.GREEN,
-    COLORS.LIGHT_BLUE,
-    COLORS.TURQUOISE,
-    COLORS.LIGHT_GREEN,
   ],
   // Set of unpleasant/bad colors
   UNPLEASANT: [
-    COLORS.ORANGE,
     COLORS.PURPLE,
     COLORS.RED,
     COLORS.YELLOW,
-    COLORS.PINK,
   ],
 };
