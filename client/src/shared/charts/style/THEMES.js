@@ -9,31 +9,26 @@ export default {
   // The default color theme
   NORMAL: [
     COLORS.BLUE,
-    COLORS.ORANGE,
-    COLORS.PURPLE,
     COLORS.GREEN,
-    COLORS.LIGHT_BLUE,
-    COLORS.RED,
     COLORS.YELLOW,
-    COLORS.PINK,
-    COLORS.TURQUOISE,
-    COLORS.LIGHT_GREEN,
+    COLORS.RED,
+    COLORS.PURPLE,
+    COLORS.ALT_BLUE,
+    COLORS.ALT_GREEN,
+    COLORS.ALT_YELLOW,
+    COLORS.ALT_RED,
+    COLORS.ALT_PURPLE,
   ],
   // Set of nice/good/pleasant colors
   PLEASANT: [
     COLORS.BLUE,
     COLORS.PURPLE,
     COLORS.GREEN,
-    COLORS.LIGHT_BLUE,
-    COLORS.TURQUOISE,
-    COLORS.LIGHT_GREEN,
   ],
   // Set of unpleasant/bad colors
   UNPLEASANT: [
-    COLORS.ORANGE,
     COLORS.PURPLE,
     COLORS.RED,
     COLORS.YELLOW,
-    COLORS.PINK,
   ],
 };
