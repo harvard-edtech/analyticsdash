@@ -58,9 +58,9 @@ class ChartContainer extends Component {
     const titleElem = (
       title
         ? (
-          <h3 className="ChartContainer-title">
+          <div className="ChartContainer-title">
             {title}
-          </h3>
+          </div>
         )
         : null
     );
@@ -83,15 +83,15 @@ class ChartContainer extends Component {
     );
 
     return (
-      <div className="ChartContainer-container">
+      <div
+        className="ChartContainer-container"
+        onMouseOver={() => { this.showCSVButton(); }}
+        onFocus={() => { this.showCSVButton(); }}
+        onMouseLeave={() => { this.hideCSVButton(); }}
+        onBlur={() => { this.hideCSVButton(); }}
+      >
         {titleElem}
-        <div
-          className="ChartContainer-contents"
-          onMouseOver={() => { this.showCSVButton(); }}
-          onFocus={() => { this.showCSVButton(); }}
-          onMouseLeave={() => { this.hideCSVButton(); }}
-          onBlur={() => { this.hideCSVButton(); }}
-        >
+        <div className="ChartContainer-contents">
           {CSVDownloadElem}
           {children}
         </div>
