@@ -28,7 +28,6 @@ class BarChart extends Component {
   render() {
     // destructure props
     const {
-      title,
       valueAxisLabel,
       barAxisLabel,
       minValue,
@@ -96,7 +95,10 @@ class BarChart extends Component {
       )
        * (1 - padding)
     );
-    // TODO: Get color and pattern definitions from genDef
+
+    // get color defs
+    const chartGenDefs = genDefs(colorMap, theme);
+    const { defs, fill } = chartGenDefs(keys);
 
     /* ---------------------------- Auto Sizing --------------------------- */
 
@@ -314,13 +316,13 @@ class BarChart extends Component {
       axisLeft,
       axisBottom,
       legends,
+      defs,
+      fill,
       indexBy: barAxisLabel,
       enableGridX: horizontal,
       enableGridY: !horizontal,
       width: chartWidth,
       height: chartHeight,
-      // TODO: add in color scheme from THEMES.JS
-      colors: ['#33A0E4', '#F39A27', '#A981D4', '#33B16D', '#F0454F', '#B6E9F9', '#FFF771', '#FFD1E9', '#00CDE1', '#DADEE3'],
       borderColor: {
         from: 'color',
         modifiers: [
@@ -349,8 +351,6 @@ class BarChart extends Component {
           },
         },
       },
-      // defs: defs}
-      // fill: fill}
       labelTextColor: { from: 'color', modifiers: [['darker', 1.6]] },
       animate: true,
       motionStiffness: 90,
