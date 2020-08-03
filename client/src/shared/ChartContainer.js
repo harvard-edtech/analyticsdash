@@ -23,11 +23,12 @@ class ChartContainer extends Component {
     };
   }
 
-  toggleCSVButtonOn() {
+  // Handlers for showing and hiding the CSV download button
+  showCSVButton() {
     this.setState({ showDownloadButton: true });
   }
 
-  toggleCSVButtonOff() {
+  hideCSVButton() {
     this.setState({ showDownloadButton: false });
   }
 
@@ -63,13 +64,14 @@ class ChartContainer extends Component {
         )
         : null
     );
+
     const CSVDownloadElem = (
       <div
         className={`ChartContainer-download-button ChartContainer-download-button-${showDownloadButton ? 'visible' : 'hidden'}`}
-        onMouseOver={() => { this.toggleCSVButtonOn(); }}
-        onFocus={() => { this.toggleCSVButtonOn(); }}
-        onMouseLeave={() => { this.toggleCSVButtonOff(); }}
-        onBlur={() => { this.toggleCSVButtonOff(); }}
+        onMouseOver={() => { this.showCSVButton(); }}
+        onFocus={() => { this.showCSVButton(); }}
+        onMouseLeave={() => { this.hideCSVButton(); }}
+        onBlur={() => { this.hideCSVButton(); }}
       >
         <CSVDownloadButton
           id={id}
@@ -85,10 +87,10 @@ class ChartContainer extends Component {
         {titleElem}
         <div
           className="ChartContainer-contents"
-          onMouseOver={() => { this.toggleCSVButtonOn(); }}
-          onFocus={() => { this.toggleCSVButtonOn(); }}
-          onMouseLeave={() => { this.toggleCSVButtonOff(); }}
-          onBlur={() => { this.toggleCSVButtonOff(); }}
+          onMouseOver={() => { this.showCSVButton(); }}
+          onFocus={() => { this.showCSVButton(); }}
+          onMouseLeave={() => { this.hideCSVButton(); }}
+          onBlur={() => { this.hideCSVButton(); }}
         >
           {CSVDownloadElem}
           {children}
