@@ -197,6 +197,7 @@ class BarChart extends Component {
     data.forEach((elem) => {
       // truncate tick and add ellipsis if over 20 chars
       if (elem[barAxisLabel].length > 20) {
+        // eslint-disable-next-line no-param-reassign
         elem[barAxisLabel] = `${elem[barAxisLabel].substring(0, 20)}...`;
       }
 
