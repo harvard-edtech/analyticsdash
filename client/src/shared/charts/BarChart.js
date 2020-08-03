@@ -92,9 +92,9 @@ class BarChart extends Component {
     let barWidth = (
       (
         (MIN_CHART_WIDTH_PX - (margin.left + margin.right))
-       / numBars
+        / numBars
       )
-       * (1 - padding)
+      * (1 - padding)
     );
 
     // get color defs
@@ -126,10 +126,9 @@ class BarChart extends Component {
         barWidth = (
           (
             (chartWidth - (margin.left + margin.right))
-           / numBars
+            / numBars
           )
-           * (1 - padding
-           )
+          * (1 - padding)
         );
 
         // if bar width is greater than the limit,
@@ -139,7 +138,7 @@ class BarChart extends Component {
             1
             - (
               (MAX_BAR_WIDTH_PX * numBars)
-             / (chartWidth - margin.left - margin.right)
+              / (chartWidth - margin.left - margin.right)
             )
           );
         }
@@ -166,7 +165,7 @@ class BarChart extends Component {
         barWidth = (
           (
             (chartHeight - (margin.top + margin.bottom))
-          / numBars
+            / numBars
           )
           * (1 - padding)
         );
@@ -178,7 +177,7 @@ class BarChart extends Component {
             1
             - (
               (MAX_BAR_WIDTH_PX * numBars)
-             / (chartHeight - margin.top - margin.bottom)
+              / (chartHeight - margin.top - margin.bottom)
             )
           );
         }
