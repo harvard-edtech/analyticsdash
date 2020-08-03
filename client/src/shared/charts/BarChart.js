@@ -14,8 +14,9 @@ import { ResponsiveBar } from '@nivo/bar';
 import genDefs from './style/genDefs';
 
 // Constant values for the bar chart
-const DEFAULT_CHART_WIDTH_PX = 750;
-const DEFAULT_CHART_HEIGHT_PX = 500;
+const MAX_CHART_HEIGHT_PX = 800;
+const MIN_CHART_WIDTH_PX = 750;
+const MIN_CHART_HEIGHT_PX = 500;
 const MIN_BAR_WIDTH_PX = 40;
 const MAX_BAR_WIDTH_PX = 100;
 
@@ -81,8 +82,8 @@ class BarChart extends Component {
     let padding = (lessPaddingBetweenBars ? 0.1 : 0.3);
 
     // Declare variables for chart width and height
-    let chartWidth = DEFAULT_CHART_WIDTH_PX;
-    let chartHeight = DEFAULT_CHART_HEIGHT_PX;
+    let chartWidth = MIN_CHART_WIDTH_PX;
+    let chartHeight = MIN_CHART_HEIGHT_PX;
 
     // number of bars
     const numBars = data.length;
@@ -90,7 +91,7 @@ class BarChart extends Component {
     // bar width
     let barWidth = (
       (
-        (DEFAULT_CHART_WIDTH_PX - (margin.left + margin.right))
+        (MIN_CHART_WIDTH_PX - (margin.left + margin.right))
        / numBars
       )
        * (1 - padding)
@@ -116,9 +117,9 @@ class BarChart extends Component {
 
         // adjust width if needed
         chartWidth = (
-          minChartWidth > DEFAULT_CHART_WIDTH_PX
+          minChartWidth > MIN_CHART_WIDTH_PX
             ? minChartWidth
-            : DEFAULT_CHART_WIDTH_PX
+            : MIN_CHART_WIDTH_PX
         );
 
         //  update bar width
@@ -156,9 +157,9 @@ class BarChart extends Component {
 
         // adjust height if needed
         chartHeight = (
-          minChartHeight > DEFAULT_CHART_HEIGHT_PX
+          minChartHeight > MIN_CHART_HEIGHT_PX
             ? minChartHeight
-            : DEFAULT_CHART_HEIGHT_PX
+            : MIN_CHART_HEIGHT_PX
         );
 
         // update bar width
@@ -368,9 +369,18 @@ class BarChart extends Component {
     }
     return (
     // Return Bar component wrapped in div
-    /* eslint-disable react/jsx-props-no-spreading */
-      <div style={{ height: (chartHeight <= 800 ? chartHeight : 800), overflowX: 'auto' }}>
+      <div style={{
+        // scale height only upto max height, scroll if over
+        height: (
+          chartHeight <= MAX_CHART_HEIGHT_PX
+            ? chartHeight
+            : MAX_CHART_HEIGHT_PX
+        ),
+        overflowX: 'auto',
+      }}
+      >
         <ResponsiveBar
+          // eslint-disable-next-line react/jsx-props-no-spreading
           {...responsiveBarProps}
         />
       </div>
