@@ -89,19 +89,28 @@ class BarChart extends Component {
     const numBars = data.length;
 
     // bar width
-    // TODO: find proper way to restructure under 80 lines
-    let barWidth = ((DEFAULT_CHART_WIDTH_PX - (margin.left + margin.right)) / numBars) * (1 - padding);
-
+    let barWidth = (
+      (
+        (DEFAULT_CHART_WIDTH_PX - (margin.left + margin.right))
+       / numBars
+      )
+       * (1 - padding)
+    );
     // TODO: Get color and pattern definitions from genDef
 
     /* ---------------------------- Auto Sizing --------------------------- */
 
     if (!autoSizeOff) {
-      // Calculate minimum chart width
-
+      // Handle vertical chart case
       if (!horizontal) {
-        // TODO: find proper way to restructure under 80 lines
-        const minChartWidth = (margin.left + margin.right) + ((numBars * MIN_BAR_WIDTH_PX) / (1 - padding));
+        // calculate minimum chart width needed
+        const minChartWidth = (
+          (margin.left + margin.right)
+          + (
+            (numBars * MIN_BAR_WIDTH_PX)
+            / (1 - padding)
+          )
+        );
 
         // adjust width if needed
         chartWidth = (
@@ -111,30 +120,64 @@ class BarChart extends Component {
         );
 
         //  update bar width
-        // TODO: find proper way to restructure under 80 lines
-        barWidth = ((chartWidth - (margin.left + margin.right)) / numBars) * (1 - padding);
+        barWidth = (
+          (
+            (chartWidth - (margin.left + margin.right))
+           / numBars
+          )
+           * (1 - padding
+           )
+        );
 
+        // if bar width is greater than the limit,
+        // decrease it by increasing padding
         if (barWidth > MAX_BAR_WIDTH_PX && !lessPaddingBetweenBars) {
-        // increase padding to decrease bar width
-        // TODO: find proper way to restructure under 80 lines
-          padding = 1 - ((MAX_BAR_WIDTH_PX * numBars) / (chartWidth - margin.left - margin.right));
+          padding = (
+            1
+            - (
+              (MAX_BAR_WIDTH_PX * numBars)
+             / (chartWidth - margin.left - margin.right)
+            )
+          );
         }
-      } else {
-        // TODO: find proper way to restructure under 80 lines
-        const minChartHeight = (margin.top + margin.bottom) + ((numBars * MIN_BAR_WIDTH_PX) / (1 - padding));
+      }
+      // Handle horizontal chart case
+      if (horizontal) {
+        // caluclate minimum chart height
+        const minChartHeight = (
+          (margin.top + margin.bottom)
+          + (
+            (numBars * MIN_BAR_WIDTH_PX)
+            / (1 - padding)
+          )
+        );
 
+        // adjust height if needed
         chartHeight = (
           minChartHeight > DEFAULT_CHART_HEIGHT_PX
             ? minChartHeight
             : DEFAULT_CHART_HEIGHT_PX
         );
-        // TODO: find proper way to restructure under 80 lines
-        barWidth = ((chartHeight - (margin.top + margin.bottom)) / numBars) * (1 - padding);
 
+        // update bar width
+        barWidth = (
+          (
+            (chartHeight - (margin.top + margin.bottom))
+          / numBars
+          )
+          * (1 - padding)
+        );
+
+        // if bar width is greater than the limit,
+        // decrease it by increasing padding
         if (barWidth > MAX_BAR_WIDTH_PX && !lessPaddingBetweenBars) {
-          // increase padding to decrease bar width
-          // TODO: find proper way to restructure under 80 lines
-          padding = 1 - ((MAX_BAR_WIDTH_PX * numBars) / (chartHeight - margin.top - margin.bottom));
+          padding = (
+            1
+            - (
+              (MAX_BAR_WIDTH_PX * numBars)
+             / (chartHeight - margin.top - margin.bottom)
+            )
+          );
         }
       }
     }
@@ -228,7 +271,6 @@ class BarChart extends Component {
     // Add legend if flag included
     if (showLegend) {
       // Increase right margin size to accomodate legend
-
       // TODO: Make dynamic and possibly limit legend char length
       margin.right = 150;
 
@@ -324,18 +366,15 @@ class BarChart extends Component {
     if (horizontal) {
       delete responsiveBarProps.width;
     } else {
-      delete delete responsiveBarProps.height;
+      delete responsiveBarProps.height;
     }
     return (
-      // Return Bar component wrapped in div
-      /* eslint-disable react/jsx-props-no-spreading */
-      <div>
-        <h2>{title}</h2>
-        <div style={{ height: '500px', overflowX: 'auto' }}>
-          <ResponsiveBar
-            {...responsiveBarProps}
-          />
-        </div>
+    // Return Bar component wrapped in div
+    /* eslint-disable react/jsx-props-no-spreading */
+      <div style={{ height: (chartHeight <= 800 ? chartHeight : 800), overflowX: 'auto' }}>
+        <ResponsiveBar
+          {...responsiveBarProps}
+        />
       </div>
     );
   }
