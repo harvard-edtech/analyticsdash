@@ -6,8 +6,8 @@
 // Import React
 import React, { Component } from 'react';
 
-// Import chart component
-import { ResponsiveBar } from '@nivo/bar';
+// Import shared chart component
+import BarChart from '../../shared/charts/BarChart';
 
 // Import shared components
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
@@ -64,30 +64,30 @@ class AttemptsContentComponent extends Component {
       // Initialize empty buckets for bar chart
       data = [
         {
-          attempts: '0 (Didn\'t Submit)',
+          label: '0 (Didn\'t Submit)',
           // Initialize no submissions bucket to total students at start
           // number gets decremented when attempts are added
-          numStudents: totalStudents,
+          value: totalStudents,
         },
         {
-          attempts: '1',
-          numStudents: 0,
+          label: '1',
+          value: 0,
         },
         {
-          attempts: '2',
-          numStudents: 0,
+          label: '2',
+          value: 0,
         },
         {
-          attempts: '3',
-          numStudents: 0,
+          label: '3',
+          value: 0,
         },
         {
-          attempts: '4',
-          numStudents: 0,
+          label: '4',
+          value: 0,
         },
         {
-          attempts: '5+',
-          numStudents: 0,
+          label: '5+',
+          value: 0,
         },
       ];
 
@@ -100,15 +100,15 @@ class AttemptsContentComponent extends Component {
 
         // If number of attempts exceeds num buckets, group all into last bucket
         if (attempt >= data.length) {
-          data[data.length - 1].numStudents += 1;
+          data[data.length - 1].value += 1;
           // Decrement no submissions bucket
-          data[0].numStudents -= 1;
+          data[0].value -= 1;
           return;
         }
-        data[attempt].numStudents += 1;
+        data[attempt].value += 1;
         // Decrement no submissions bucket
         // If attempt is 0, it cancels out
-        data[0].numStudents -= 1;
+        data[0].value -= 1;
       });
     }
 
@@ -148,83 +148,6 @@ class AttemptsContentComponent extends Component {
       );
     };
 
-    /**
-     * returns desired color for respective bars
-     * @author {Aryan Pandey}
-     * @param {object} barObj - object containing all arguments
-     * @param {string | number} barObj.id - id of bar
-     * @param {number} barObj.value - value of bar
-     * @param {number} barObj.index - index of bar
-     * @param {string | number} barObj.indexValue - index value of the bar
-     * @param {object} barObj.data - object containing raw data associated
-     *   with bar
-     * @returns {string} desired color of the bar
-     */
-    const getColor = (barObj) => { return (barObj.index === 0 ? '#DCDCDC' : '#03A9F3'); };
-
-    // initialize the bar chart
-    const barChart = (
-      <div className="AttemptsContentComponent-body-container">
-        <ResponsiveBar
-          data={data}
-          keys={['numStudents']}
-          indexBy="attempts"
-          margin={{
-            top: 20, right: 80, bottom: 50, left: 80,
-          }}
-          padding={0.3}
-          colors={getColor}
-          maxValue={totalStudents}
-          borderColor={{
-            from: 'color',
-            modifiers: [
-              ['darker', 0.6],
-            ],
-          }}
-          borderRadius={1}
-          axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'Students',
-            legendPosition: 'middle',
-            legendOffset: -60,
-          }}
-          axisBottom={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'Attempts',
-            legendPosition: 'middle',
-            legendOffset: 40,
-          }}
-          borderWidth={1}
-          labelSkipHeight={12}
-          theme={{
-            fontSize: 12,
-            axis: {
-              ticks: {
-                text: {
-                  fill: '#aaaaaa',
-                },
-              },
-              legend: {
-                text: {
-                  fill: '#333333',
-                  fontSize: '20px',
-                },
-              },
-            },
-          }}
-          labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-          animate
-          motionStiffness={90}
-          motionDamping={15}
-          tooltip={customTooltip}
-        />
-      </div>
-    );
-
     /* -------------------------------- Body ------------------------------- */
 
     let body;
@@ -236,7 +159,16 @@ class AttemptsContentComponent extends Component {
       );
     }
     if (!body) {
-      body = barChart;
+      body = (
+        // initialize the bar chart
+        <BarChart
+          bars={data}
+          valueAxisLabel="Students"
+          barAxisLabel="Attempts"
+          tooltipFormatter={customTooltip}
+          maxValue={totalStudents}
+        />
+      );
     }
     /* --------------------------- Create Full UI -------------------------- */
 
