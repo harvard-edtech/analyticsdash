@@ -1,11 +1,12 @@
 .ChartContainer-container {
-  background: rgba(200, 200, 200, .8);
+  background: rgba(230, 230, 230, .8);
+  border-radius: 10px;
 }
 
 .ChartContainer-title {
   height: 40px;
   width: 100%;
-  padding-top: 5px;
+  padding-top: 10px;
 }
 
 .ChartContainer-contents {
@@ -18,7 +19,7 @@
   position: absolute;
   z-index: 500;
   top: -35px;
-  right: 5px;
+  right: 12px;
 }
 
 .ChartContainer-download-button-visible {
