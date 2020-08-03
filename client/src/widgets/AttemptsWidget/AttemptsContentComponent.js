@@ -16,9 +16,6 @@ import LoadingSpinner from '../../shared/LoadingSpinner';
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
 
-// Import css
-import './AttemptsContentComponent.css';
-
 /* ---------------------------- Class --------------------------- */
 
 class AttemptsContentComponent extends Component {
