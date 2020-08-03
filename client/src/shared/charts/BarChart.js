@@ -331,8 +331,7 @@ class BarChart extends Component {
       },
       borderRadius: 1,
       borderWidth: 1,
-      labelSkipHeight: 12,
-      labelSkipWidth: 13,
+      enableLabel: false,
       theme: {
         fontSize: 12,
         outlineWidth: 22,
@@ -351,7 +350,6 @@ class BarChart extends Component {
           },
         },
       },
-      labelTextColor: { from: 'color', modifiers: [['darker', 1.6]] },
       animate: true,
       motionStiffness: 90,
       motionDamping: 15,
