@@ -23,11 +23,18 @@ class ChartContainer extends Component {
     };
   }
 
-  // Handlers for showing and hiding the CSV download button
+  /**
+   * Handler for showing the CSV download button
+   * @author Grace Whitney
+   */
   showCSVButton() {
     this.setState({ showDownloadButton: true });
   }
 
+  /**
+   * Handler for hiding the CSV download button
+   * @author Grace Whitney
+   */
   hideCSVButton() {
     this.setState({ showDownloadButton: false });
   }
@@ -43,7 +50,7 @@ class ChartContainer extends Component {
 
     const {
       title,
-      CSVDownloadProps,
+      csvDownloadProps,
       children,
     } = this.props;
 
@@ -52,7 +59,7 @@ class ChartContainer extends Component {
       id,
       headerMap,
       data,
-    } = CSVDownloadProps;
+    } = csvDownloadProps;
 
     // Create elements
     const titleElem = (
@@ -68,10 +75,6 @@ class ChartContainer extends Component {
     const CSVDownloadElem = (
       <div
         className={`ChartContainer-download-button ChartContainer-download-button-${showDownloadButton ? 'visible' : 'hidden'}`}
-        onMouseOver={() => { this.showCSVButton(); }}
-        onFocus={() => { this.showCSVButton(); }}
-        onMouseLeave={() => { this.hideCSVButton(); }}
-        onBlur={() => { this.hideCSVButton(); }}
       >
         <CSVDownloadButton
           id={id}
@@ -104,7 +107,7 @@ ChartContainer.propTypes = {
   // Chart title
   title: PropTypes.string,
   // CSVDownloadButton props
-  CSVDownloadProps: PropTypes.shape({
+  csvDownloadProps: PropTypes.shape({
     // Name of the file
     filename: PropTypes.string.isRequired,
     // Map of prop to header: prop => header title
