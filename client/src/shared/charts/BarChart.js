@@ -53,13 +53,13 @@ class BarChart extends Component {
 
     // Translate chart data from bars prop to data array usable by nivo
     bars.forEach((bar) => {
-      // Check if only one value is present for a bar label
+      // Check for case where a bar label has only one value
       if (bar.value) {
         data.push({ [barAxisLabel]: bar.label, [valueAxisLabel]: bar.value });
         return;
       }
 
-      // Check if multiple values is present for a bar label
+      // Check for case where a bar label has an array of values
       if (bar.values) {
         data.push({ [barAxisLabel]: bar.label, ...bar.values });
         // Update keys array
@@ -72,7 +72,7 @@ class BarChart extends Component {
       }
     });
 
-    /* ------------------------- Initialize Defaults ------------------------ */
+    /* ------------------------- Define Chart Styles ------------------------ */
     // Set up default margins
     const margin = {
       top: 20, right: 20, bottom: 10, left: 80,
@@ -89,13 +89,7 @@ class BarChart extends Component {
     const numBars = data.length;
 
     // bar width
-    let barWidth = (
-      (
-        (MIN_CHART_WIDTH_PX - (margin.left + margin.right))
-        / numBars
-      )
-      * (1 - padding)
-    );
+    let barWidth;
 
     // get color defs
     const chartGenDefs = genDefs(colorMap, theme);
@@ -107,7 +101,7 @@ class BarChart extends Component {
       // Handle vertical chart case
       if (!horizontal) {
         // calculate minimum chart width needed
-        const minChartWidth = (
+        const requiredChartWidth = (
           (margin.left + margin.right)
           + (
             (numBars * MIN_BAR_WIDTH_PX)
@@ -115,10 +109,10 @@ class BarChart extends Component {
           )
         );
 
-        // adjust width if needed
+        // increase chart width if below minimum width needed
         chartWidth = (
-          minChartWidth > MIN_CHART_WIDTH_PX
-            ? minChartWidth
+          requiredChartWidth > MIN_CHART_WIDTH_PX
+            ? requiredChartWidth
             : MIN_CHART_WIDTH_PX
         );
 
@@ -145,8 +139,8 @@ class BarChart extends Component {
       }
       // Handle horizontal chart case
       if (horizontal) {
-        // caluclate minimum chart height
-        const minChartHeight = (
+        // calculate minimum chart height
+        const requiredChartheight = (
           (margin.top + margin.bottom)
           + (
             (numBars * MIN_BAR_WIDTH_PX)
@@ -154,10 +148,10 @@ class BarChart extends Component {
           )
         );
 
-        // adjust height if needed
+        // increase chart height if below minimum height needed
         chartHeight = (
-          minChartHeight > MIN_CHART_HEIGHT_PX
-            ? minChartHeight
+          requiredChartheight > MIN_CHART_HEIGHT_PX
+            ? requiredChartheight
             : MIN_CHART_HEIGHT_PX
         );
 
@@ -204,7 +198,8 @@ class BarChart extends Component {
       const approxTickWidth = elem[barAxisLabel].length * 8;
 
       // Set rotate flag if bar label length exceeds limit
-      if (barWidth <= approxTickWidth && !horizontal) {
+      // or automatically if autoSizeOff
+      if ((autoSizeOff || barWidth <= approxTickWidth) && !horizontal) {
         rotateTicksX = true;
         if (approxTickWidth > maxTickLengthX) {
           // set maxTickLength value
@@ -377,6 +372,7 @@ class BarChart extends Component {
             : MAX_CHART_HEIGHT_PX
         ),
         overflowX: 'auto',
+        width: '100%',
       }}
       >
         <ResponsiveBar
