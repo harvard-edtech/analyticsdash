@@ -17,6 +17,9 @@ import LoadingSpinner from '../../shared/LoadingSpinner';
 // Import style
 import './GradeHistogramContentComponent.css';
 
+// Import chart style
+import genDefs from '../../shared/charts/style/genDefs';
+
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
 
@@ -133,9 +136,7 @@ class GradeHistogramContentComponent extends Component {
               indexBy="label"
               keys={['numSubmissions']}
               padding={0.05}
-              colors={{
-                scheme: 'category10',
-              }}
+              groupMode="grouped"
               margin={{
                 top: 50,
                 right: 50,
