@@ -17,11 +17,17 @@ import genDefs from './style/genDefs';
 // Import style
 import './PieChart.css';
 
-// Style constants
-const PAD_ANGLE = 0.5;
-const CORNER_RADIUS = 2;
-const BORDER_WIDTH = 1;
-const INNER_RADIUS = 0.5;
+// Style constants for nivo chart props
+const PAD_ANGLE_DEGREES = 0.5;
+const CORNER_RADIUS_PX = 2;
+const BORDER_WIDTH_PX = 1;
+const INNER_RADIUS_RATIO = 0.5;
+const MARGINS = {
+  top: 30,
+  bottom: 80,
+  left: 20,
+  right: 20,
+}; // Margins in pixels
 
 class PieChart extends Component {
   /**
@@ -92,16 +98,11 @@ class PieChart extends Component {
           defs={defs}
           fill={fill}
 
-          innerRadius={INNER_RADIUS}
-          padAngle={PAD_ANGLE}
-          cornerRadius={CORNER_RADIUS}
-          margin={{
-            top: 30,
-            bottom: 80,
-            left: 20,
-            right: 20,
-          }}
-          borderWidth={BORDER_WIDTH}
+          innerRadius={INNER_RADIUS_RATIO}
+          padAngle={PAD_ANGLE_DEGREES}
+          cornerRadius={CORNER_RADIUS_PX}
+          margin={MARGINS}
+          borderWidth={BORDER_WIDTH_PX}
 
           enableRadialLabels={showSegmentLabels}
           radialLabel={formatSegmentLabel}
