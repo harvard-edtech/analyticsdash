@@ -153,6 +153,16 @@ class App extends Component {
       configMap = metadata.config_map;
       widgetOrder = metadata.widget_order;
 
+      // Use default configMap if one isn't set up yet
+      if (configMap === undefined || configMap === null) {
+        ({ configMap } = DEFAULT_SETUP);
+      }
+
+      // Use default widgetOrder if one isn't set up yet
+      if (widgetOrder === undefined || widgetOrder === null) {
+        ({ widgetOrder } = DEFAULT_SETUP);
+      }
+
       // Remove widgets that no longer exist
       widgetOrder = widgetOrder.filter((widgetId) => {
         return idToWidget[widgetId];
@@ -161,16 +171,6 @@ class App extends Component {
       return this.setState({
         fatalErrorMessage: err.message,
       });
-    }
-
-    // Use default configMap if one isn't set up yet
-    if (configMap === undefined || configMap === null) {
-      ({ configMap } = DEFAULT_SETUP);
-    }
-
-    // Use default widgetOrder if one isn't set up yet
-    if (widgetOrder === undefined || widgetOrder === null) {
-      ({ widgetOrder } = DEFAULT_SETUP);
     }
 
     // Introduce student
