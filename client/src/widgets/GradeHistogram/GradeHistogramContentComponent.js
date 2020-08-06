@@ -137,7 +137,6 @@ class GradeHistogramContentComponent extends Component {
             barAxisLabel="Grade Range"
             lessPaddingBetweenBars
             bars={histogramData}
-            padding={0.05}
             tooltip={(bar) => {
               return (
                 <div>
