@@ -22,6 +22,9 @@ import {
 // Import shared propTypes
 import Widget from '../../shared/propTypes/Widget';
 
+// Import subcomponents 
+import ActionBar from './ActionBar';
+
 // Import helpers
 import checkRequirements from '../helpers/checkRequirements';
 
@@ -35,6 +38,8 @@ class WidgetContainer extends Component {
     this.state = {
       // True if dropdown is expanded
       dropdownExpanded: false,
+      // Actions to be displayed by the action bar
+      actions: null,
     };
   }
 
@@ -55,7 +60,10 @@ class WidgetContainer extends Component {
       widgetAtTopOfList,
       widgetAtBottomOfList,
     } = this.props;
-    const { dropdownExpanded } = this.state;
+    const { 
+      dropdownExpanded,
+      actions,
+    } = this.state;
 
     // Get the contents of the widget
     const { ContentComponent } = widget;
@@ -175,6 +183,10 @@ class WidgetContainer extends Component {
 
     const requirementsErrorMessage = checkRequirements(widget.requirements);
 
+    const setActions = (newActions) => {
+      this.setState({ actions: newActions });
+    };
+
     const content = (
       requirementsErrorMessage
         ? (
@@ -193,8 +205,22 @@ class WidgetContainer extends Component {
             onOpenConfiguration={onOpenConfiguration}
             onOpenHelp={onOpenHelp}
             onChangeConfiguration={onChangeConfiguration}
+            setActions={setActions}
           />
         )
+    );
+
+    /* -------------------------- Action Bar ------------------------ */
+
+    const actionBar = (
+      actions && (actions !== [])
+        ? (
+          <ActionBar
+            actions={actions}
+            widget={widget}
+          />
+        )
+        : null
     );
 
     /* --------------------------- Full UI -------------------------- */
@@ -231,6 +257,11 @@ class WidgetContainer extends Component {
         {/* Contents */}
         <div className="alert alert-light text-dark m-0 p-2">
           {content}
+        </div>
+
+        {/* Action Bar*/}
+        <div>
+          {actionBar}
         </div>
       </div>
     );

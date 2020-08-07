@@ -21,8 +21,8 @@ class ActionBar extends Component {
       widget,
     } = this.props;
 
-    if (actions === []) {
-      return;
+    if (!actions || actions === []) {
+      return null;
     }
 
     const buttons = actions.forEach((action) => {
@@ -62,12 +62,10 @@ ActionBar.propTypes = {
       id: PropTypes.string.isRequired,
       // Label for the action button
       label: PropTypes.string.isRequired,
-      // Longer description of the action that will be taken
+      // Description of the action that will be taken
       description: PropTypes.string.isRequired,
       // Handler function for the action
-      actionHandler: PropTypes.func.isRequired,
-      // Optional view for the confirmation modal instead of default
-      confirmationComponent: PropTypes.node,
+      onClick: PropTypes.func.isRequired,
     })
   ).isRequired,
   // Widget that is rendering the action bar
