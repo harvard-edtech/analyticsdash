@@ -20,13 +20,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 // Import shared propTypes
-import Widget from '../shared/propTypes/Widget';
+import Widget from '../../shared/propTypes/Widget';
 
 // Import helpers
-import checkRequirements from './helpers/checkRequirements';
+import checkRequirements from '../helpers/checkRequirements';
 
 // CSS
-import './WidgetContainer.css';
+import './index.css';
 
 class WidgetContainer extends Component {
   constructor(props) {
