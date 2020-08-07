@@ -7,9 +7,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// Import library components
-import { ResponsiveBar } from '@nivo/bar';
-
 // Import shared components
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
@@ -17,9 +14,6 @@ import BarChart from '../../shared/charts/BarChart';
 
 // Import style
 import './GradeHistogramContentComponent.css';
-
-// Import chart style
-import genDefs from '../../shared/charts/style/genDefs';
 
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
