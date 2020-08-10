@@ -131,7 +131,7 @@ class GradeHistogramContentComponent extends Component {
             barAxisLabel="Grade Range"
             lessPaddingBetweenBars
             bars={histogramData}
-            tooltip={(bar) => {
+            tooltipFormatter={(bar) => {
               return (
                 <div>
                   {`${bar.value} submissions (${((bar.value / subs.length) * 100).toFixed(2)}%)`}
