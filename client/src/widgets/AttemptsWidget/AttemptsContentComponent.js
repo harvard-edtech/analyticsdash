@@ -66,7 +66,7 @@ class AttemptsContentComponent extends Component {
         {
           label: '0 (Didn\'t Submit)',
           // nest 0 index as separate series so we can set its color separately
-          values: { zeroIndex: totalStudents },
+          values: { 'No Submissions': totalStudents },
 
         // ^ Initialize no submissions bucket to total students at start
         // number gets decremented when attempts are added
@@ -81,7 +81,7 @@ class AttemptsContentComponent extends Component {
         },
         {
           label: '3',
-          value: 0,
+          value: 69,
         },
         {
           label: '4',
@@ -170,7 +170,7 @@ class AttemptsContentComponent extends Component {
           barAxisLabel="Attempts"
           tooltipFormatter={customTooltip}
           maxValue={totalStudents}
-          colorMap={{ zeroIndex: COLORS.GRAY }}
+          colorMap={{ 'No Submissions': COLORS.GRAY }}
         />
       );
     }
