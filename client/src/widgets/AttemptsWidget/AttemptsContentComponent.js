@@ -164,6 +164,7 @@ class AttemptsContentComponent extends Component {
       body = (
         // initialize the bar chart
         <BarChart
+          title="Assignment Attempts"
           bars={data}
           valueAxisLabel="Students"
           barAxisLabel="Attempts"
