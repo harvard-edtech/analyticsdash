@@ -183,10 +183,6 @@ class WidgetContainer extends Component {
 
     const requirementsErrorMessage = checkRequirements(widget.requirements);
 
-    const setActions = (newActions) => {
-      this.setState({ actions: newActions });
-    };
-
     const content = (
       requirementsErrorMessage
         ? (
@@ -205,7 +201,9 @@ class WidgetContainer extends Component {
             onOpenConfiguration={onOpenConfiguration}
             onOpenHelp={onOpenHelp}
             onChangeConfiguration={onChangeConfiguration}
-            setActions={setActions}
+            setActions={(newActions) => {
+              this.setState({ actions: newActions });
+            }}
           />
         )
     );
@@ -259,7 +257,7 @@ class WidgetContainer extends Component {
           {content}
         </div>
 
-        {/* Action Bar*/}
+        {/* Action Bar */}
         <div>
           {actionBar}
         </div>

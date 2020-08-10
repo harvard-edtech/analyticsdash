@@ -21,10 +21,6 @@ class ActionBar extends Component {
       widget,
     } = this.props;
 
-    if (!actions || actions === []) {
-      return null;
-    }
-
     const buttons = actions.forEach((action) => {
       const {
         id,
@@ -47,7 +43,7 @@ class ActionBar extends Component {
     });
 
     return (
-      <div>
+      <div style={{height: 20}}>
         {buttons}
       </div>
     );

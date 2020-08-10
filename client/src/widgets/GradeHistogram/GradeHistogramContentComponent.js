@@ -42,6 +42,7 @@ class GradeHistogramContentComponent extends Component {
 
     const {
       configuration,
+      setActions,
     } = this.props;
 
     const {
@@ -52,6 +53,17 @@ class GradeHistogramContentComponent extends Component {
     const assignmentDropdown = (
       <AssignmentsDropdown
         onChange={(newAssignment) => {
+          const actionHandler = () => {
+            console.log('Yo');
+          };
+          setActions([
+            {
+              id: 'say-hi',
+              label: 'Say Hi',
+              description: 'Say hello to your friends',
+              onClick: actionHandler,
+            },
+          ]);
           this.setState({
             assignment: newAssignment,
           });
@@ -186,6 +198,8 @@ class GradeHistogramContentComponent extends Component {
 GradeHistogramContentComponent.propTypes = {
   // The current configuration, which provides the number of histogram buckets
   configuration: PropTypes.shape({ numBuckets: PropTypes.number }).isRequired,
+  // Function that takes an array of action objects
+  setActions: PropTypes.func.isRequired,
 };
 
 export default GradeHistogramContentComponent;
