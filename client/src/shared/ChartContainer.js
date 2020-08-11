@@ -50,6 +50,7 @@ class ChartContainer extends Component {
 
     const {
       title,
+      hideTitle,
       csvDownloadProps,
       children,
     } = this.props;
@@ -63,11 +64,11 @@ class ChartContainer extends Component {
 
     // Create elements
     const titleElem = (
-      title
+      !hideTitle
         ? (
-          <div className="ChartContainer-title">
+          <h4 className="ChartContainer-title">
             {title}
-          </div>
+          </h4>
         )
         : null
     );
@@ -105,7 +106,9 @@ class ChartContainer extends Component {
 
 ChartContainer.propTypes = {
   // Chart title
-  title: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  // If true, title is hidden
+  hideTitle: PropTypes.bool,
   // CSVDownloadButton props
   csvDownloadProps: PropTypes.shape({
     // Name of the file
@@ -122,8 +125,8 @@ ChartContainer.propTypes = {
 };
 
 ChartContainer.defaultProps = {
-  // No chart title
-  title: null,
+  // Do not hide title
+  hideTitle: false,
 };
 
 export default ChartContainer;

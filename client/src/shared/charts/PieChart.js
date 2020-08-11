@@ -14,6 +14,9 @@ import { ResponsivePie } from '@nivo/pie';
 // Import color definitions
 import genDefs from './style/genDefs';
 
+// Import shared component
+import ChartContainer from '../ChartContainer';
+
 // Import style
 import './PieChart.css';
 
@@ -36,6 +39,8 @@ class PieChart extends Component {
    */
   render() {
     const {
+      title,
+      hideTitle,
       segments,
       theme,
       colorMap,
@@ -43,6 +48,9 @@ class PieChart extends Component {
       showLegend,
       tooltipFormatter,
     } = this.props;
+
+    // Ensure chartTitle is defined in case of propTypes failure
+    const chartTitle = title || 'Analytics Chart';
 
     // Convert segment data to required format
     const chartData = segments.map((segment) => {
@@ -90,35 +98,61 @@ class PieChart extends Component {
       chartData.map((segment) => { return segment.id; })
     );
 
+    // Define CSV download button props
+    const csvFilename = `${chartTitle.replace(' ', '-').toLowerCase()}-data`;
+    const csvHeaderMap = {
+      label: 'Category',
+      value: 'Value',
+    };
+
     return (
-      <div className="PieChart-body-container">
-        <ResponsivePie
-          data={chartData}
+      <ChartContainer
+        title={chartTitle}
+        hideTitle={hideTitle}
+        csvDownloadProps={{
+          filename: csvFilename,
+          headerMap: csvHeaderMap,
+          data: chartData,
+          id: `${csvFilename}-download-button`,
+        }}
+      >
+        <div className="PieChart-body-container">
+          <ResponsivePie
+            /* Data */
+            data={chartData}
 
-          defs={defs}
-          fill={fill}
+            /* Colors and patterns */
+            defs={defs}
+            fill={fill}
 
-          innerRadius={INNER_RADIUS_RATIO}
-          padAngle={PAD_ANGLE_DEGREES}
-          cornerRadius={CORNER_RADIUS_PX}
-          margin={MARGINS}
-          borderWidth={BORDER_WIDTH_PX}
+            /* Styling parameters */
+            innerRadius={INNER_RADIUS_RATIO}
+            padAngle={PAD_ANGLE_DEGREES}
+            cornerRadius={CORNER_RADIUS_PX}
+            margin={MARGINS}
+            borderWidth={BORDER_WIDTH_PX}
 
-          enableRadialLabels={showSegmentLabels}
-          radialLabel={formatSegmentLabel}
+            /* Labels and legends */
+            enableRadialLabels={showSegmentLabels}
+            radialLabel={formatSegmentLabel}
 
-          enableSlicesLabels={false}
+            enableSlicesLabels={false}
 
-          legends={legends}
+            legends={legends}
 
-          tooltip={chartTooltipFormatter}
-        />
-      </div>
+            tooltip={chartTooltipFormatter}
+          />
+        </div>
+      </ChartContainer>
     );
   }
 }
 
 PieChart.propTypes = {
+  // Chart title
+  title: PropTypes.string.isRequired,
+  // If true, title is hidden
+  hideTitle: PropTypes.bool,
   // Segment data
   segments: PropTypes.arrayOf(PropTypes.shape({
     // Label of the segment
@@ -144,10 +178,12 @@ PieChart.propTypes = {
 };
 
 PieChart.defaultProps = {
+  // Do not hide title
+  hideTitle: false,
   // Default theme
   theme: undefined,
   // No colorMap
-  colorMap: {},
+  colorMap: undefined,
   // Segment labels hidden
   showSegmentLabels: false,
   // Legend hidden
