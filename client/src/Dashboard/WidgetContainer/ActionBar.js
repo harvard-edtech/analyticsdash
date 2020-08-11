@@ -30,6 +30,7 @@ class ActionBar extends Component {
 
     const buttons = actions.map((action) => {
       const {
+        key,
         id,
         label,
         description,
@@ -38,6 +39,7 @@ class ActionBar extends Component {
 
       return (
         <button
+          key={key}
           id={`${widget.id}-${id}`}
           className="btn btn-light mr-2 ActionBar-button border border-dark"
           type="button"
@@ -66,6 +68,8 @@ ActionBar.propTypes = {
   // Array of action objects
   actions: PropTypes.arrayOf(
     PropTypes.shape({
+      // Unique key for the action button
+      key: PropTypes.string.isRequired,
       // Id for the action button
       id: PropTypes.string.isRequired,
       // Label for the action button
