@@ -10,6 +10,9 @@ import PropTypes from 'prop-types';
 // Import chart component
 import { ResponsiveBar } from '@nivo/bar';
 
+// Import shared component
+import ChartContainer from '../ChartContainer';
+
 // Import themes
 import genDefs from './style/genDefs';
 
@@ -29,6 +32,8 @@ class BarChart extends Component {
   render() {
     // destructure props
     const {
+      title,
+      hideTitle,
       valueAxisLabel,
       barAxisLabel,
       minValue,
@@ -46,7 +51,7 @@ class BarChart extends Component {
     /* ------------------------ Translate Bars Data ------------------------- */
 
     // Array to hold translated bars data for the chart
-    const data = [];
+    const chartData = [];
 
     // initialize keys array to only have valueAxisLabel as key in the start
     const keys = [valueAxisLabel];
@@ -54,14 +59,18 @@ class BarChart extends Component {
     // Translate chart data from bars prop to data array usable by nivo
     bars.forEach((bar) => {
       // Check for case where a bar label has only one value
-      if (bar.value) {
-        data.push({ [barAxisLabel]: bar.label, [valueAxisLabel]: bar.value });
-        return;
+      if (!Number.isNaN(bar.value) && bar.value !== undefined) {
+        chartData.push(
+          {
+            [barAxisLabel]: bar.label,
+            [valueAxisLabel]: bar.value,
+          }
+        );
       }
 
       // Check for case where a bar label has an array of values
       if (bar.values) {
-        data.push({ [barAxisLabel]: bar.label, ...bar.values });
+        chartData.push({ [barAxisLabel]: bar.label, ...bar.values });
         // Update keys array
         Object.keys(bar.values).forEach((valueLabel) => {
           // Add in key if not already in the array
@@ -73,6 +82,10 @@ class BarChart extends Component {
     });
 
     /* ------------------------- Define Chart Styles ------------------------ */
+
+    // Ensure chartTitle is always defined
+    const chartTitle = title || 'Analytics Chart';
+
     // Set up default margins
     const margin = {
       top: 20, right: 20, bottom: 10, left: 80,
@@ -86,7 +99,7 @@ class BarChart extends Component {
     let chartHeight = MIN_CHART_HEIGHT_PX;
 
     // number of bars
-    const numBars = data.length;
+    const numBars = chartData.length;
 
     // bar width
     let barWidth;
@@ -94,6 +107,18 @@ class BarChart extends Component {
     // get color defs
     const chartGenDefs = genDefs(colorMap, theme);
     const { defs, fill } = chartGenDefs(keys);
+
+    const headerMap = {};
+    chartData.forEach((bar) => {
+      Object.keys(bar).forEach((barSeries) => {
+        headerMap[barSeries] = barSeries;
+      });
+    });
+    // Define CSV download button props
+    const csvFilename = `${chartTitle.replace(' ', '-').toLowerCase()}-data`;
+    const csvHeaderMap = headerMap;
+    console.log(headerMap);
+    console.log(chartData);
 
     /* ---------------------------- Auto Sizing --------------------------- */
 
@@ -187,7 +212,7 @@ class BarChart extends Component {
     // max length of a tick
     let maxTickLengthX = 0; let maxTickLengthY = 0;
 
-    data.forEach((elem) => {
+    chartData.forEach((elem) => {
       // truncate tick and add ellipsis if over 20 chars
       if (elem[barAxisLabel].length > 20) {
         // eslint-disable-next-line no-param-reassign
@@ -302,7 +327,7 @@ class BarChart extends Component {
     /* ------------------------- Build Bar Component ------------------------ */
 
     const responsiveBarProps = {
-      data,
+      data: chartData,
       keys,
       margin,
       layout,
@@ -319,14 +344,6 @@ class BarChart extends Component {
       enableGridY: !horizontal,
       width: chartWidth,
       height: chartHeight,
-      borderColor: {
-        from: 'color',
-        modifiers: [
-          ['darker', 0.6],
-        ],
-      },
-      borderRadius: 1,
-      borderWidth: 1,
       enableLabel: false,
       theme: {
         fontSize: 12,
@@ -363,23 +380,34 @@ class BarChart extends Component {
       delete responsiveBarProps.height;
     }
     return (
-    // Return Bar component wrapped in div
-      <div style={{
-        // scale height only upto max height, scroll if over
-        height: (
-          chartHeight <= MAX_CHART_HEIGHT_PX
-            ? chartHeight
-            : MAX_CHART_HEIGHT_PX
-        ),
-        overflowX: 'auto',
-        width: '100%',
-      }}
+      <ChartContainer
+        title={chartTitle}
+        hideTitle={hideTitle}
+        csvDownloadProps={{
+          filename: csvFilename,
+          headerMap: csvHeaderMap,
+          data: chartData,
+          id: `${csvFilename}-download-button`,
+        }}
       >
-        <ResponsiveBar
+        <div style={{
+        // scale height only upto max height, scroll if over
+          height: (
+            chartHeight <= MAX_CHART_HEIGHT_PX
+              ? chartHeight
+              : MAX_CHART_HEIGHT_PX
+          ),
+          overflowX: 'auto',
+          width: '100%',
+          maxHeight: '100%',
+        }}
+        >
+          <ResponsiveBar
           // eslint-disable-next-line react/jsx-props-no-spreading
-          {...responsiveBarProps}
-        />
-      </div>
+            {...responsiveBarProps}
+          />
+        </div>
+      </ChartContainer>
     );
   }
 }
@@ -427,6 +455,8 @@ BarChart.propTypes = {
   theme: PropTypes.string,
   // Color map of ids to color
   colorMap: PropTypes.objectOf(PropTypes.any),
+  // if true, title is hidden
+  hideTitle: PropTypes.bool,
 };
 
 BarChart.defaultProps = {
@@ -446,9 +476,12 @@ BarChart.defaultProps = {
   tooltipFormatter: ({ id, value }) => {
     return `${id}: ${value}`;
   },
+  // No theme
   theme: undefined,
   // No colorMap
-  colorMap: {},
+  colorMap: undefined,
+  // Default to false
+  hideTitle: false,
 };
 
 export default BarChart;
