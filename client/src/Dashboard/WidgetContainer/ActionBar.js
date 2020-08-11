@@ -10,6 +10,9 @@ import PropTypes from 'prop-types';
 // Import shared PropTypes
 import Widget from '../../shared/propTypes/Widget';
 
+// Import style
+import './ActionBar.css';
+
 class ActionBar extends Component {
   /**
    * Render the ActionBar
@@ -21,7 +24,11 @@ class ActionBar extends Component {
       widget,
     } = this.props;
 
-    const buttons = actions.forEach((action) => {
+    if (!actions) {
+      return null;
+    }
+
+    const buttons = actions.map((action) => {
       const {
         id,
         label,
@@ -32,7 +39,7 @@ class ActionBar extends Component {
       return (
         <button
           id={`${widget.id}-${id}`}
-          className="btn ActionBar-button"
+          className="btn btn-light mr-2 ActionBar-button border border-dark"
           type="button"
           aria-label={description}
           onClick={onClick}
@@ -43,8 +50,13 @@ class ActionBar extends Component {
     });
 
     return (
-      <div style={{height: 20}}>
-        {buttons}
+      <div className="alert bg-info d-flex align-items-center justify-content-start m-0 p-2">
+        <h3 className="text-light mr-2">
+          Actions:
+        </h3>
+        <div className="d-flex ActionBar-button-container">
+          {buttons}
+        </div>
       </div>
     );
   }

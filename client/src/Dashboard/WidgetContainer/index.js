@@ -27,6 +27,7 @@ import ActionBar from './ActionBar';
 
 // Import helpers
 import checkRequirements from '../helpers/checkRequirements';
+import actionsHaveChanged from '../helpers/actionsHaveChanged';
 
 // CSS
 import './index.css';
@@ -60,7 +61,7 @@ class WidgetContainer extends Component {
       widgetAtTopOfList,
       widgetAtBottomOfList,
     } = this.props;
-    const { 
+    const {
       dropdownExpanded,
       actions,
     } = this.state;
@@ -202,7 +203,9 @@ class WidgetContainer extends Component {
             onOpenHelp={onOpenHelp}
             onChangeConfiguration={onChangeConfiguration}
             setActions={(newActions) => {
-              this.setState({ actions: newActions });
+              if (actionsHaveChanged(actions, newActions)) {
+                this.setState({ actions: newActions });
+              }
             }}
           />
         )
@@ -211,14 +214,10 @@ class WidgetContainer extends Component {
     /* -------------------------- Action Bar ------------------------ */
 
     const actionBar = (
-      actions && (actions !== [])
-        ? (
-          <ActionBar
-            actions={actions}
-            widget={widget}
-          />
-        )
-        : null
+      <ActionBar
+        actions={actions}
+        widget={widget}
+      />
     );
 
     /* --------------------------- Full UI -------------------------- */
@@ -258,7 +257,7 @@ class WidgetContainer extends Component {
         </div>
 
         {/* Action Bar */}
-        <div>
+        <div className="mt-2">
           {actionBar}
         </div>
       </div>
