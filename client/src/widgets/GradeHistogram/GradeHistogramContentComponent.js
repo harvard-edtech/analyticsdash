@@ -7,18 +7,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// Import library components
-import { ResponsiveBar } from '@nivo/bar';
-
 // Import shared components
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
+import BarChart from '../../shared/charts/BarChart';
 
 // Import style
 import './GradeHistogramContentComponent.css';
-
-// Import chart style
-import genDefs from '../../shared/charts/style/genDefs';
 
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
@@ -100,7 +95,7 @@ class GradeHistogramContentComponent extends Component {
         const histogramData = [];
         for (let i = 0; i < numBuckets; i++) {
           const min = Number((bucketSize * i).toFixed(2));
-          const max = Number((bucketSize * (i + 1)).toFixed(2) - 0.01);
+          const max = Number((bucketSize * (i + 1) - 0.01).toFixed(2));
 
           // First and last buckets have alternate label format
           let label;
@@ -114,7 +109,7 @@ class GradeHistogramContentComponent extends Component {
 
           histogramData.push({
             label,
-            numSubmissions: 0,
+            value: 0,
           });
         }
         scores.forEach((score) => {
@@ -126,50 +121,24 @@ class GradeHistogramContentComponent extends Component {
           } else {
             bucketIndex = Math.floor(score / bucketSize);
           }
-          histogramData[bucketIndex].numSubmissions += 1;
+          histogramData[bucketIndex].value += 1;
         });
 
         body = (
-          <div className="GradeHistogramContentComponent-body-container">
-            <ResponsiveBar
-              data={histogramData}
-              indexBy="label"
-              keys={['numSubmissions']}
-              padding={0.05}
-              groupMode="grouped"
-              margin={{
-                top: 50,
-                right: 50,
-                bottom: 50,
-                left: 50,
-              }}
-              label="label"
-              enableGridY
-              axisLeft={{
-                legend: 'Number of Submissions',
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legendPosition: 'middle',
-                legendOffset: -40,
-              }}
-              axisBottom={{
-                legend: 'Grade Range',
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legendPosition: 'middle',
-                legendOffset: 40,
-              }}
-              tooltip={(bar) => {
-                return (
-                  <div>
-                    {`${bar.value} submissions (${((bar.value / subs.length) * 100).toFixed(2)}%)`}
-                  </div>
-                );
-              }}
-            />
-          </div>
+          <BarChart
+            title="Grade Distribution"
+            valueAxisLabel="Number of Submissions"
+            barAxisLabel="Grade Range"
+            lessPaddingBetweenBars
+            bars={histogramData}
+            tooltipFormatter={(bar) => {
+              return (
+                <div>
+                  {`${bar.value} submissions (${((bar.value / subs.length) * 100).toFixed(2)}%)`}
+                </div>
+              );
+            }}
+          />
         );
       }
     }
