@@ -13,6 +13,9 @@ import BarChart from '../../shared/charts/BarChart';
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 
+// Import colors
+import COLORS from '../../shared/charts/style/COLORS';
+
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
 
@@ -58,13 +61,15 @@ class AttemptsContentComponent extends Component {
     let data;
 
     if (totalStudents && assignment) {
-      // Initialize empty buckets for bar chart
+      // Initialize initial bucket state for bar chart
       data = [
         {
           label: '0 (Didn\'t Submit)',
-          // Initialize no submissions bucket to total students at start
-          // number gets decremented when attempts are added
-          value: totalStudents,
+          // Add 0 index as separate series so we can set its color separately
+          values: { 'No Submissions': totalStudents },
+
+        // ^ Initialize no submissions bucket to total students at start
+        // number gets decremented when attempts are added
         },
         {
           label: '1',
@@ -159,11 +164,13 @@ class AttemptsContentComponent extends Component {
       body = (
         // initialize the bar chart
         <BarChart
+          title="Assignment Attempts"
           bars={data}
           valueAxisLabel="Students"
           barAxisLabel="Attempts"
           tooltipFormatter={customTooltip}
           maxValue={totalStudents}
+          colorMap={{ 'No Submissions': COLORS.GRAY }}
         />
       );
     }
