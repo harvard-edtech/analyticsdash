@@ -65,7 +65,7 @@ class AttemptsContentComponent extends Component {
       data = [
         {
           label: '0 (Didn\'t Submit)',
-          // nest 0 index as separate series so we can set its color separately
+          // Add 0 index as separate series so we can set its color separately
           values: { 'No Submissions': totalStudents },
 
         // ^ Initialize no submissions bucket to total students at start
@@ -81,7 +81,7 @@ class AttemptsContentComponent extends Component {
         },
         {
           label: '3',
-          value: 69,
+          value: 0,
         },
         {
           label: '4',
