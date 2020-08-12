@@ -187,8 +187,6 @@ class GradeHistogramContentComponent extends Component {
 GradeHistogramContentComponent.propTypes = {
   // The current configuration, which provides the number of histogram buckets
   configuration: PropTypes.shape({ numBuckets: PropTypes.number }).isRequired,
-  // Function to set widget actions that takes an array of action objects
-  setActions: PropTypes.func.isRequired,
 };
 
 export default GradeHistogramContentComponent;

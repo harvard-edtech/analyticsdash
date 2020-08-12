@@ -24,10 +24,12 @@ class ActionBar extends Component {
       widget,
     } = this.props;
 
+    // If no actions have been provided, do not render the ActionBar
     if (!actions) {
       return null;
     }
 
+    // Define a button for each action object
     const buttons = actions.map((action) => {
       const {
         key,
@@ -51,14 +53,15 @@ class ActionBar extends Component {
       );
     });
 
+    // Return the action bar with action buttons
     return (
-      <div className="alert bg-info d-flex align-items-center justify-content-start m-0 p-2">
-        <h3 className="text-light mr-2">
+      <div className="alert text-left bg-info m-0 p-2">
+        {/* Header */}
+        <h3 className="d-inline-block text-light mr-2 mb-0">
           Actions:
         </h3>
-        <div className="d-flex ActionBar-button-container">
-          {buttons}
-        </div>
+        {/* Action buttons */}
+        {buttons}
       </div>
     );
   }
@@ -76,7 +79,9 @@ ActionBar.propTypes = {
       label: PropTypes.string.isRequired,
       // Description of the action that will be taken
       description: PropTypes.string.isRequired,
-      // Handler function for the action
+      /**
+       * Handler function for the action
+       */
       onClick: PropTypes.func.isRequired,
     })
   ).isRequired,
