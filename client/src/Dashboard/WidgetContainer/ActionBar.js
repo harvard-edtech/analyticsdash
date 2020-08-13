@@ -55,13 +55,15 @@ class ActionBar extends Component {
 
     // Return the action bar with action buttons
     return (
-      <div className="alert text-left bg-info m-0 p-2">
+      <div className="alert d-flex align-items-center text-left bg-info m-0 p-2">
         {/* Header */}
         <h3 className="d-inline-block text-light mr-2 mb-0">
           Actions:
         </h3>
-        {/* Action buttons */}
-        {buttons}
+        <div className="ActionBar-button-container">
+          {/* Action buttons */}
+          {buttons}
+        </div>
       </div>
     );
   }

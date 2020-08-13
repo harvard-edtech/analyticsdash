@@ -4,3 +4,7 @@
   overflow: hidden;
 }
 
+.ActionBar-button-container {
+  overflow: wrap;
+}
+
