@@ -1,4 +1,6 @@
-#Tooltip-circle {
+
+/* Hoverable tooltip circle */
+.Tooltip-circle {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -12,7 +14,8 @@
   cursor: pointer;
 }
 
-#Tooltip-container {
+/* Container for hidden tooltip div */
+.Tooltip-container {
   display: inline-block;
   visibility: hidden;
   position: absolute;
@@ -32,14 +35,18 @@
   transition: visibility .5s, opacity .5s linear; 
 }
 
-#Tooltip-circle:hover #Tooltip-container {
+/* Make container visible on hover */
+.Tooltip-circle:hover .Tooltip-container {
   visibility: visible;
 }
-#Tooltip-circle:hover {
+
+/* Increase opacity on hover */
+.Tooltip-circle:hover {
     opacity: 1;
 }
 
-#Tooltip-container::before {
+/* Tooltip arrow */
+.Tooltip-container::before {
   content: '';
   position: absolute;
   top: 50%;
@@ -50,7 +57,8 @@
   border-color: transparent gray transparent transparent;
 }
 
-#Tooltip-help-bar {
+/* Tooltip help bar */
+.Tooltip-help-bar {
   display: flex;
   justify-content: space-between;
   align-items:center;
@@ -62,6 +70,7 @@
   border-radius: 4px 4px 2px 2px;
 }
 
+/* Button linked to onOpenHelp function */
 .Tooltip-help-button {
   margin-left: 20px;
   border-radius: 4px;
@@ -70,6 +79,7 @@
   margin: 2px 2px 2px 20px;
 }
 
+/* Tooltip text */
 .Tooltip-text {
   padding: 5px;
 }

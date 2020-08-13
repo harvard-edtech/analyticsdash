@@ -24,21 +24,25 @@ class Tooltip extends Component {
 
     // Button for onOpenHelp function
     const helpButton = (
-      <button type="button" className="Tooltip-help-button btn-xsm btn-info" onClick={onOpenHelp}>
+      <button
+        type="button"
+        className="Tooltip-help-button btn-xsm btn-info"
+        onClick={onOpenHelp}
+      >
         Show More
       </button>
     );
 
     // return tooltip component
     return (
-      <div id="Tooltip-circle" className="bg-secondary">
+      <div className="Tooltip-circle bg-secondary">
         ?
-        <div id="Tooltip-container">
-          <div id="Tooltip-help-bar" className="bg-secondary">
+        <div className="Tooltip-container">
+          <div className="Tooltip-help-bar bg-secondary">
             Help
             {
               // include helpButton only if onOpenHelp defined
-              (onOpenHelp ? helpButton : '')
+              (onOpenHelp ? helpButton : null)
             }
           </div>
           <div className="Tooltip-text">
@@ -46,7 +50,6 @@ class Tooltip extends Component {
           </div>
         </div>
       </div>
-
     );
   }
 }
