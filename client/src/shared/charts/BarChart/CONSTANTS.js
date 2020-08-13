@@ -1,5 +1,4 @@
 module.exports = {
-
   // Maximum allowed height for the bar chart.
   // If height exceeds this value,
   // chart becomes vertically scrollable

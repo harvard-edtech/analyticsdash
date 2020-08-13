@@ -11,13 +11,13 @@ import PropTypes from 'prop-types';
 import { ResponsiveBar } from '@nivo/bar';
 
 // Import shared component
-import ChartContainer from '../ChartContainer';
+import ChartContainer from '../../ChartContainer';
 
 // Import themes
-import genDefs from './style/genDefs';
+import genDefs from '../style/genDefs';
 
 // Import constants
-import CONSTANTS from './BAR_CHART_CONSTANTS';
+import CONSTANTS from './CONSTANTS';
 
 class BarChart extends Component {
   /**
@@ -136,22 +136,19 @@ class BarChart extends Component {
     /* ---------------------------- CSV Button --------------------------- */
 
     // header map for CSV button
-    const headerMap = {};
+    const csvHeaderMap = {};
 
     // Fill headerMap with values from chartData
     chartData.forEach((bar) => {
       Object.keys(bar).forEach((barSeries) => {
-        headerMap[barSeries] = barSeries;
+        csvHeaderMap[barSeries] = barSeries;
       });
     });
 
-    // Define CSV download button props
-    const csvFilename = `${chartTitle.replace(' ', '-').toLowerCase()}-data`;
-    const csvHeaderMap = headerMap;
-
     /* ------------------------- Helper functions  -------------------------- */
 
-    /** Calculates and returns minimum chart length required (bar-axis)
+    /**
+     * Calculates and returns minimum chart length required (bar-axis)
      *   for bars to be >= MIN_BAR_WIDTH
      * @author Aryan Pandey
      * @return {number} min chart length
@@ -174,7 +171,8 @@ class BarChart extends Component {
       );
     };
 
-    /** Increases chart padding to decrease bar width
+    /**
+     * Increases chart padding to decrease bar width
      *   if bar is too wide
      * @author Aryan Pandey
      */
@@ -409,10 +407,10 @@ class BarChart extends Component {
         title={chartTitle}
         hideTitle={hideTitle}
         csvDownloadProps={{
-          filename: csvFilename,
+          filename: chartTitle,
           headerMap: csvHeaderMap,
           data: chartData,
-          id: `${csvFilename}-download-button`,
+          id: `${chartTitle}-download-button`,
         }}
       >
         <div style={{
