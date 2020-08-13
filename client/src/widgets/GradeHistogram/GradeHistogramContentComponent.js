@@ -37,6 +37,7 @@ class GradeHistogramContentComponent extends Component {
 
     const {
       configuration,
+      setActions,
     } = this.props;
 
     const {
