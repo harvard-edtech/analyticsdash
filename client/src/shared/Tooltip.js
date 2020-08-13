@@ -7,6 +7,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+// Import FontAwesome Icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+
 // Import styles
 import './Tooltip.css';
 
@@ -35,8 +39,10 @@ class Tooltip extends Component {
 
     // return tooltip component
     return (
-      <div className="Tooltip-circle bg-secondary">
-        ?
+      <div className="Tooltip-circle text-secondary">
+        <FontAwesomeIcon
+          icon={faQuestionCircle}
+        />
         <div className="Tooltip-container">
           <div className="Tooltip-help-bar bg-secondary">
             Help

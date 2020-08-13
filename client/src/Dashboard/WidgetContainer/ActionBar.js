@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 
 // Import shared PropTypes
 import Widget from '../../shared/propTypes/Widget';
+import Action from '../../shared/propTypes/Action';
 
 // Import style
 import './ActionBar.css';
@@ -71,22 +72,7 @@ class ActionBar extends Component {
 
 ActionBar.propTypes = {
   // Array of action objects
-  actions: PropTypes.arrayOf(
-    PropTypes.shape({
-      // Unique key for the action button
-      key: PropTypes.string.isRequired,
-      // Id for the action button
-      id: PropTypes.string.isRequired,
-      // Label for the action button
-      label: PropTypes.string.isRequired,
-      // Description of the action that will be taken
-      description: PropTypes.string.isRequired,
-      /**
-       * Handler function for the action
-       */
-      onClick: PropTypes.func.isRequired,
-    })
-  ).isRequired,
+  actions: PropTypes.arrayOf(Action).isRequired,
   // Widget that is rendering the action bar
   widget: Widget.isRequired,
 };

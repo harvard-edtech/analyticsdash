@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { ResponsiveBar } from '@nivo/bar';
 
 // Import themes
-import genDefs from './style/genDefs';
+import genDefs from './STYLE/genDefs';
 
 // Constant values for the bar chart
 const MAX_CHART_HEIGHT_PX = 800;

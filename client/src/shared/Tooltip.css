@@ -2,14 +2,7 @@
 /* Hoverable tooltip circle */
 .Tooltip-circle {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  background: gray;
-  color: #fff;
   opacity: 0.9;
-  font-size: 12px;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
   position: relative;
   cursor: pointer;
 }
@@ -27,17 +20,18 @@
   box-sizing: border-box;
   border-radius: 6px;
   text-align: center;
-  z-index: 100;
+  z-index: 6000000000;
   width: max-content;
   min-width: 10vw;
   max-width: 30vw;
   box-shadow: 1px 1px lightgray;
-  transition: visibility .5s, opacity .5s linear; 
+  transition: visibility 0.5s, opacity .5s linear; 
 }
 
 /* Make container visible on hover */
 .Tooltip-circle:hover .Tooltip-container {
   visibility: visible;
+  opacity: 1;
 }
 
 /* Increase opacity on hover */

@@ -14,7 +14,7 @@ import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 
 // Import colors
-import COLORS from '../../shared/charts/style/COLORS';
+import COLORS from '../../shared/charts/STYLE/COLORS';
 
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
