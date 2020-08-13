@@ -16,12 +16,8 @@ import ChartContainer from '../ChartContainer';
 // Import themes
 import genDefs from './style/genDefs';
 
-// Constant values for the bar chart
-const MAX_CHART_HEIGHT_PX = 800;
-const MIN_CHART_WIDTH_PX = 750;
-const MIN_CHART_HEIGHT_PX = 500;
-const MIN_BAR_WIDTH_PX = 40;
-const MAX_BAR_WIDTH_PX = 100;
+// Import constants
+import CONSTANTS from './BAR_CHART_CONSTANTS';
 
 class BarChart extends Component {
   /**
@@ -32,6 +28,7 @@ class BarChart extends Component {
   render() {
     // destructure props
     const {
+      maxHeight,
       title,
       hideTitle,
       valueAxisLabel,
@@ -58,22 +55,27 @@ class BarChart extends Component {
 
     // Translate chart data from bars prop to data array usable by nivo
     bars.forEach((bar) => {
-      // Check for case where a bar label has only one value
-      if (!Number.isNaN(bar.value) && bar.value !== undefined) {
+      // Check for single bar series case
+      if (bar.value !== undefined && !Number.isNaN(bar.value)) {
         chartData.push(
           {
+            // Set barAxisLabel as the key for the bar label
             [barAxisLabel]: bar.label,
+            // Set valueAxisLabel as the key for the bar value
             [valueAxisLabel]: bar.value,
           }
         );
       }
 
-      // Check for case where a bar label has an array of values
+      // Check for multiple bar series case
       if (bar.values) {
+        // Set barAxisLabel as the key for the bar label
+        // And use the key-value pairs in the bar.values object
         chartData.push({ [barAxisLabel]: bar.label, ...bar.values });
+
         // Update keys array
         Object.keys(bar.values).forEach((valueLabel) => {
-          // Add in key if not already in the array
+          // Add in key only if not already in the array
           if (keys.indexOf(valueLabel) < 0) {
             keys.push(valueLabel);
           }
@@ -88,15 +90,18 @@ class BarChart extends Component {
 
     // Set up default margins
     const margin = {
-      top: 20, right: 20, bottom: 10, left: 80,
+      top: CONSTANTS.MARGIN_TOP_PX,
+      right: CONSTANTS.MARGIN_RIGHT_PX,
+      bottom: CONSTANTS.MARGIN_BOTTOM_PX,
+      left: CONSTANTS.MARGIN_LEFT_PX,
     };
 
     // boolean that sets padding flag
     let padding = (lessPaddingBetweenBars ? 0.1 : 0.3);
 
     // Declare variables for chart width and height
-    let chartWidth = MIN_CHART_WIDTH_PX;
-    let chartHeight = MIN_CHART_HEIGHT_PX;
+    let chartWidth = CONSTANTS.MIN_CHART_WIDTH_PX;
+    let chartHeight = CONSTANTS.MIN_CHART_HEIGHT_PX;
 
     // number of bars
     const numBars = chartData.length;
@@ -108,110 +113,146 @@ class BarChart extends Component {
     const chartGenDefs = genDefs(colorMap, theme);
     const { defs, fill } = chartGenDefs(keys);
 
+    // define theme
+    const chartTheme = {
+      fontSize: 12,
+      outlineWidth: 22,
+      axis: {
+        ticks: {
+          text: {
+            fill: '#aaaaaa',
+            fontSize: 12,
+          },
+        },
+        legend: {
+          text: {
+            fill: '#aaaaaa',
+            fontSize: 20,
+          },
+        },
+      },
+    };
+
+    /* ---------------------------- CSV Button --------------------------- */
+
+    // header map for CSV button
     const headerMap = {};
+
+    // Fill headerMap with values from chartData
     chartData.forEach((bar) => {
       Object.keys(bar).forEach((barSeries) => {
         headerMap[barSeries] = barSeries;
       });
     });
+
     // Define CSV download button props
     const csvFilename = `${chartTitle.replace(' ', '-').toLowerCase()}-data`;
     const csvHeaderMap = headerMap;
-    console.log(headerMap);
-    console.log(chartData);
+
+    /* ------------------------- Helper functions  -------------------------- */
+
+    /** Calculates and returns minimum chart length required (bar-axis)
+     *   for bars to be >= MIN_BAR_WIDTH
+     * @author Aryan Pandey
+     * @return {number} min chart length
+     */
+    const getMinChartLength = () => {
+      // set which margins to consider
+      const margins = (
+        horizontal
+          ? margin.top + margin.bottom
+          : margin.left + margin.right
+      );
+
+      // return the min chart length
+      return (
+        margins
+        + (
+          (numBars * CONSTANTS.MIN_BAR_WIDTH_PX)
+          / (1 - padding)
+        )
+      );
+    };
+
+    /** Increases chart padding to decrease bar width
+     *   if bar is too wide
+     * @author Aryan Pandey
+     */
+    const updatePadding = () => {
+      // set which margins to consider
+      const margins = (
+        horizontal
+          ? margin.top + margin.bottom
+          : margin.left + margin.right
+      );
+
+      // set which chartLength to consider
+      const chartLength = (
+        horizontal
+          ? chartHeight
+          : chartWidth
+      );
+
+      //  calculate current bar width
+      barWidth = (
+        (
+          (chartLength - margins) / numBars
+        )
+          * (1 - padding)
+      );
+
+      // if bar width is greater than limit,
+      // decrease it by increasing padding
+      if (barWidth > CONSTANTS.MAX_BAR_WIDTH_PX && !lessPaddingBetweenBars) {
+        padding = (
+          1
+            - (
+              (CONSTANTS.MAX_BAR_WIDTH_PX * numBars) / (chartLength - margins)
+            )
+        );
+      }
+    };
 
     /* ---------------------------- Auto Sizing --------------------------- */
 
     if (!autoSizeOff) {
-      // Handle vertical chart case
-      if (!horizontal) {
-        // calculate minimum chart width needed
-        const requiredChartWidth = (
-          (margin.left + margin.right)
-          + (
-            (numBars * MIN_BAR_WIDTH_PX)
-            / (1 - padding)
-          )
-        );
+      // get min chart length needed
+      const requiredChartLength = getMinChartLength();
 
+      // vertical chart case
+      if (!horizontal) {
         // increase chart width if below minimum width needed
         chartWidth = (
-          requiredChartWidth > MIN_CHART_WIDTH_PX
-            ? requiredChartWidth
-            : MIN_CHART_WIDTH_PX
+          requiredChartLength > CONSTANTS.MIN_CHART_WIDTH_PX
+            ? requiredChartLength
+            : CONSTANTS.MIN_CHART_WIDTH_PX
         );
-
-        //  update bar width
-        barWidth = (
-          (
-            (chartWidth - (margin.left + margin.right))
-            / numBars
-          )
-          * (1 - padding)
-        );
-
-        // if bar width is greater than the limit,
-        // decrease it by increasing padding
-        if (barWidth > MAX_BAR_WIDTH_PX && !lessPaddingBetweenBars) {
-          padding = (
-            1
-            - (
-              (MAX_BAR_WIDTH_PX * numBars)
-              / (chartWidth - margin.left - margin.right)
-            )
-          );
-        }
       }
-      // Handle horizontal chart case
-      if (horizontal) {
-        // calculate minimum chart height
-        const requiredChartheight = (
-          (margin.top + margin.bottom)
-          + (
-            (numBars * MIN_BAR_WIDTH_PX)
-            / (1 - padding)
-          )
-        );
 
+      // horizontal chart case
+      if (horizontal) {
         // increase chart height if below minimum height needed
         chartHeight = (
-          requiredChartheight > MIN_CHART_HEIGHT_PX
-            ? requiredChartheight
-            : MIN_CHART_HEIGHT_PX
+          requiredChartLength > chartHeight
+            ? requiredChartLength
+            : chartHeight
         );
-
-        // update bar width
-        barWidth = (
-          (
-            (chartHeight - (margin.top + margin.bottom))
-            / numBars
-          )
-          * (1 - padding)
-        );
-
-        // if bar width is greater than the limit,
-        // decrease it by increasing padding
-        if (barWidth > MAX_BAR_WIDTH_PX && !lessPaddingBetweenBars) {
-          padding = (
-            1
-            - (
-              (MAX_BAR_WIDTH_PX * numBars)
-              / (chartHeight - margin.top - margin.bottom)
-            )
-          );
-        }
       }
+
+      // update padding to ensure no bars are too wide
+      updatePadding();
     }
 
     /* ------------------------ Label Overlap ---------------------- */
 
-    // boolean to keep track of if x axis ticks are rotated
+    // boolean to keep track x-axis tick rotation
     let rotateTicksX = false;
-    // variable to determine how much legend offset needed if ticks rotated
+    // variable to keep track of space occupied by ticks
     let tickXOffset; let tickYOffset;
     // max length of a tick
-    let maxTickLengthX = 0; let maxTickLengthY = 0;
+    let maxTickLength = 0;
 
+    // Cycle through all the ticks
     chartData.forEach((elem) => {
       // truncate tick and add ellipsis if over 20 chars
       if (elem[barAxisLabel].length > 20) {
@@ -219,30 +260,28 @@ class BarChart extends Component {
         elem[barAxisLabel] = `${elem[barAxisLabel].substring(0, 20)}...`;
       }
 
-      // 8 is approx value we use for 1 char
-      const approxTickWidth = elem[barAxisLabel].length * 8;
+      // calculate approx width of the tick
+      const approxTickWidth = (
+        elem[barAxisLabel].length * CONSTANTS.APPROX_CHAR_WIDTH_PX
+      );
+
+      // set maxTickLength value
+      if (approxTickWidth > maxTickLength) {
+        maxTickLength = approxTickWidth;
+      }
 
       // Set rotate flag if bar label length exceeds limit
       // or automatically if autoSizeOff
       if ((autoSizeOff || barWidth <= approxTickWidth) && !horizontal) {
         rotateTicksX = true;
-        if (approxTickWidth > maxTickLengthX) {
-          // set maxTickLength value
-          maxTickLengthX = approxTickWidth;
 
-          // Update tickOffset value
-          tickXOffset = Math.sin(Math.PI / 6) * maxTickLengthX;
-        }
+        // Update tickOffset value
+        tickXOffset = Math.sin(Math.PI / 6) * maxTickLength;
       }
 
       if (horizontal) {
-        if (approxTickWidth > maxTickLengthY) {
-          // set maxTickLength value
-          maxTickLengthY = approxTickWidth;
-
-          // Update tickOffset value
-          tickYOffset = maxTickLengthY;
-        }
+        // Update tickOffset value
+        tickYOffset = maxTickLength;
       }
     });
 
@@ -253,9 +292,13 @@ class BarChart extends Component {
       tickSize: 5,
       tickPadding: 5,
       tickRotation: 0,
-      legend: valueAxisLabel,
+      legend: (horizontal ? barAxisLabel : valueAxisLabel),
       legendPosition: 'middle',
-      legendOffset: (tickYOffset ? -tickYOffset - 15 : -60),
+      legendOffset: (
+        tickYOffset
+          ? -tickYOffset - 15
+          : -CONSTANTS.DEFAULT_LEGEND_OFFSET_PX
+      ),
     };
 
     // Dynamically set marginLeft to be 10px left of the left tick legend
@@ -265,12 +308,13 @@ class BarChart extends Component {
     const axisBottom = {
       tickSize: 5,
       tickPadding: 5,
-      tickRotation: (rotateTicksX ? -30 : 0),
-      legend: barAxisLabel,
-      // if tickXOffset defined, set legend offset to be
-      // tickXOffset + tickSize + tickPadding + 15 extra px,
-      // Default to 60 otherwise
-      legendOffset: (tickXOffset ? tickXOffset + 5 + 5 + 15 : 60),
+      tickRotation: (rotateTicksX ? CONSTANTS.TICK_ROTATION_DEG : 0),
+      legend: (horizontal ? valueAxisLabel : barAxisLabel),
+      legendOffset: (
+        tickXOffset
+          ? tickXOffset + 25
+          : CONSTANTS.DEFAULT_LEGEND_OFFSET_PX
+      ),
       legendPosition: 'middle',
     };
 
@@ -282,20 +326,26 @@ class BarChart extends Component {
     // boolean that sets horizontal or vertical flag
     const layout = (horizontal ? 'horizontal' : 'vertical');
 
-    if (horizontal) {
-      // If horizontal, switch label names of the axes
-      axisLeft.legend = barAxisLabel;
-      axisBottom.legend = valueAxisLabel;
-    }
-
     /* ------------------------- Legends ------------------------ */
 
     let legends;
     // Add legend if flag included
     if (showLegend) {
-      // Increase right margin size to accomodate legend
-      // TODO: Make dynamic and possibly limit legend char length
-      margin.right = 150;
+      // Get max length of legends
+      const maxLegendLength = Math.max(
+        ...(keys.map((el) => {
+          return el.length;
+        })
+        )
+      );
+
+      // approximate max width of legend text
+      const approxMaxLegendWidth = (
+        maxLegendLength * CONSTANTS.APPROX_CHAR_WIDTH_PX
+      );
+
+      // Increase right margin size to accomodate legends
+      margin.right += approxMaxLegendWidth + 10;
 
       // legends object
       legends = [
@@ -312,14 +362,6 @@ class BarChart extends Component {
           itemDirection: 'left-to-right',
           itemOpacity: 0.85,
           symbolSize: 20,
-          effects: [
-            {
-              on: 'hover',
-              style: {
-                itemOpacity: 1,
-              },
-            },
-          ],
         },
       ];
     }
@@ -344,25 +386,8 @@ class BarChart extends Component {
       enableGridY: !horizontal,
       width: chartWidth,
       height: chartHeight,
+      theme: chartTheme,
       enableLabel: false,
-      theme: {
-        fontSize: 12,
-        outlineWidth: 22,
-        axis: {
-          ticks: {
-            text: {
-              fill: '#aaaaaa',
-              fontSize: 12,
-            },
-          },
-          legend: {
-            text: {
-              fill: '#aaaaaa',
-              fontSize: 20,
-            },
-          },
-        },
-      },
       animate: true,
       motionStiffness: 90,
       motionDamping: 15,
@@ -393,9 +418,9 @@ class BarChart extends Component {
         <div style={{
         // scale height only upto max height, scroll if over
           height: (
-            chartHeight <= MAX_CHART_HEIGHT_PX
+            chartHeight <= maxHeight
               ? chartHeight
-              : MAX_CHART_HEIGHT_PX
+              : maxHeight
           ),
           overflowX: 'auto',
           width: '100%',
@@ -457,6 +482,8 @@ BarChart.propTypes = {
   colorMap: PropTypes.objectOf(PropTypes.any),
   // if true, title is hidden
   hideTitle: PropTypes.bool,
+  // maximum height the bar chart can occupy
+  maxHeight: PropTypes.number,
 };
 
 BarChart.defaultProps = {
@@ -482,6 +509,8 @@ BarChart.defaultProps = {
   colorMap: undefined,
   // Default to false
   hideTitle: false,
+  // default maximum
+  maxHeight: CONSTANTS.MAX_CHART_HEIGHT_PX,
 };
 
 export default BarChart;
