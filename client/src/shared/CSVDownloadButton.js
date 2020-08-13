@@ -44,7 +44,7 @@ class CSVDownloadButton extends Component {
         // Add this prop
         rows[i].push(
           datum[prop] === undefined
-            ? '–'
+            ? '-'
             : datum[prop]
         );
       });
