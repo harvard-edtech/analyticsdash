@@ -2,5 +2,11 @@
   max-width: 180px;
   height: 62px;
   overflow: hidden;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.ActionBar-button-container {
+  overflow: wrap;
 }
 
