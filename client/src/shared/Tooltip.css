@@ -1,54 +1,33 @@
-
 /* Hoverable tooltip circle */
 .Tooltip-circle {
-  display: inline-block;
-  opacity: 0.9;
-  position: relative;
+  opacity: 0.85;
   cursor: pointer;
-}
-
-/* Container for hidden tooltip div */
-.Tooltip-container {
-  display: inline-block;
-  visibility: hidden;
-  position: absolute;
-  left: calc(100% + 15px);
-  top: 50%;
-  transform: translateY(-50%);
-  background: #f5f5f5;
-  color: black;
-  box-sizing: border-box;
-  border-radius: 6px;
-  text-align: center;
-  z-index: 6000000000;
-  width: max-content;
-  min-width: 10vw;
-  max-width: 30vw;
-  box-shadow: 1px 1px lightgray;
-  transition: visibility 0.5s, opacity .5s linear; 
-}
-
-/* Make container visible on hover */
-.Tooltip-circle:hover .Tooltip-container {
-  visibility: visible;
-  opacity: 1;
+  background: transparent;
+  border:none;
+  float: right;
 }
 
 /* Increase opacity on hover */
 .Tooltip-circle:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
-/* Tooltip arrow */
-.Tooltip-container::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  margin-top: -5px;
-  border-width: 6px;
-  border-style: solid;
-  border-color: transparent gray transparent transparent;
+/* remove outline on focus */
+.Tooltip-circle:focus {
+  outline: none;
+}
+
+/* Container for hidden tooltip div */
+.Tooltip-container {
+  background: #f5f5f5;
+  box-sizing: border-box;
+  border-radius: 6px;
+  text-align: center;
+  width: max-content;
+  min-width: 10vw;
+  max-width: 30vw;
+  border-width: 1px;
+  box-shadow: 1px 1px lightgray;
 }
 
 /* Tooltip help bar */
@@ -66,14 +45,20 @@
 
 /* Button linked to onOpenHelp function */
 .Tooltip-help-button {
-  margin-left: 20px;
+  margin-left: 5px;
+  margin-right: 1px;
   border-radius: 4px;
   font-size: 12px !important;
   border-style: solid;
-  margin: 2px 2px 2px 20px;
 }
 
 /* Tooltip text */
 .Tooltip-text {
   padding: 5px;
+}
+
+/* Custom transparent theme */
+.tippy-box[data-theme~='transparent'] {
+  background: transparent;
+  background-color: transparent;
 }
