@@ -15,6 +15,6 @@ export default {
     icon,
     title: 'Grader Comments Impact',
     subtitle: 'Student readership and improvement metrics for grader comments',
-    description: 'This tool provides summary and detailed data showing which students read greader feedback and how their score improvement compares.',
+    description: 'This tool provides summary and detailed data showing which students read greader feedback and how their scores improved.',
   },
 };
