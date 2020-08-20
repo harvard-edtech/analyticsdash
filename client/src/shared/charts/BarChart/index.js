@@ -28,6 +28,7 @@ class BarChart extends Component {
   render() {
     // destructure props
     const {
+      containerWidth,
       maxHeight,
       title,
       hideTitle,
@@ -100,7 +101,7 @@ class BarChart extends Component {
     let padding = (lessPaddingBetweenBars ? 0.1 : 0.3);
 
     // Declare variables for chart width and height
-    let chartWidth = CONSTANTS.MIN_CHART_WIDTH_PX;
+    let chartWidth = containerWidth;
     let chartHeight = CONSTANTS.MIN_CHART_HEIGHT_PX;
 
     // number of bars
@@ -223,7 +224,7 @@ class BarChart extends Component {
         chartWidth = (
           requiredChartLength > CONSTANTS.MIN_CHART_WIDTH_PX
             ? requiredChartLength
-            : CONSTANTS.MIN_CHART_WIDTH_PX
+            : containerWidth
         );
       }
 
@@ -414,14 +415,15 @@ class BarChart extends Component {
         }}
       >
         <div style={{
-        // scale height only upto max height, scroll if over
+          width: `${containerWidth}px`,
+          // scale height only upto max height, scroll if over
           height: (
             chartHeight <= maxHeight
               ? chartHeight
               : maxHeight
           ),
           overflowX: 'auto',
-          width: '100%',
+          maxWidth: '100%',
           maxHeight: '100%',
         }}
         >
@@ -480,8 +482,10 @@ BarChart.propTypes = {
   colorMap: PropTypes.objectOf(PropTypes.any),
   // if true, title is hidden
   hideTitle: PropTypes.bool,
-  // maximum height the bar chart can occupy
+  // maximum height of the chart container in px
   maxHeight: PropTypes.number,
+  // width of the chart container in px
+  containerWidth: PropTypes.number,
 };
 
 BarChart.defaultProps = {
@@ -509,6 +513,8 @@ BarChart.defaultProps = {
   hideTitle: false,
   // default maximum
   maxHeight: CONSTANTS.MAX_CHART_HEIGHT_PX,
+  // default width
+  containerWidth: CONSTANTS.MIN_CHART_WIDTH_PX,
 };
 
 export default BarChart;
