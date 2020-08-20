@@ -7,12 +7,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-// Import shared components 
+// Import shared components
 import BarChart from '../../shared/charts/BarChart';
 import PieChart from '../../shared/charts/PieChart';
+import Modal from '../../shared/Modal';
 
 // Import shared colors 
-import COLORS from '../../shared/charts/style/COLORS';
+import COLORS from '../../shared/charts/STYLE/COLORS';
 // Import data
 import getCanvasData from '../../helpers/getCanvasData';
 
@@ -33,11 +34,11 @@ class GraderCommentsImpactContent extends Component {
     this.state = {
       // Current view state 
       state: STATES.HOME,
-    }
+    };
   }
 
   messageActionHandler() {
-    this.setState(STATES.MESSAGE_PREVIEW)
+    this.setState({ state: STATES.MESSAGE_PREVIEW });
   }
 
   render() {
@@ -51,8 +52,8 @@ class GraderCommentsImpactContent extends Component {
 
     /* -------------------- Calculate data ----------------------- */
     const canvasData = getCanvasData();
-    const assignments = getCanvasData.listAssignments();
-    let readData = [];
+    const assignments = canvasData.listAssignments();
+    const readData = [];
     // For each assignment, collate raw comment read data
     assignments.forEach((assignment) => {
       // Do nothing if assignment grading has not started
@@ -104,6 +105,28 @@ class GraderCommentsImpactContent extends Component {
       });
     });
 
+    /* --------------------- Action Button ----------------------- */
+    const messageAction = {
+      key: 'grader-comments-impact-message-students',
+      id: 'grader-comments-impact-message-students',
+      label: 'Message Students With Unread Comments',
+      description: 'Send a customizable message to students with unread comments',
+      onClick: () => { this.messageActionHandler(); },
+    };
+
+    setActions([messageAction]);
+
+    /* --------------------- Action Modal ------------------------ */
+    const messageActionModal = (
+      <Modal
+        title="Send a message!"
+        body="No body yet :)"
+        onClose={() => { this.setState({ state: STATES.HOME }); }}
+        type={Modal.TYPES.OKAY_CANCEL}
+        okayLabel="Send Message"
+      />
+    );
+
     /* ----------------------- Bar Chart ------------------------- */
 
     // Convert raw data into bar chart data format
@@ -144,8 +167,15 @@ class GraderCommentsImpactContent extends Component {
       />
     );
 
+    let body;
+    if (state === STATES.HOME) {
+      body = barChart;
+    } else if (state === STATES.MESSAGE_PREVIEW) {
+      body = messageActionModal;
+    }
+
     return (
-      barChart
+      body
     );
   }
 }
