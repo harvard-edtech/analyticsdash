@@ -12,7 +12,7 @@ const STATES = {
   LOADING: 'message-loading',
   SUCCESS: 'message-success',
   FAILURE: 'message-failure',
-}
+};
 
 class MessageStudentsModal extends Component {
   constructor(props) {
@@ -53,8 +53,27 @@ class MessageStudentsModal extends Component {
       return onClose();
     };
 
+    const numRecipients = recipientIds.length;
+
     const previewView = (
-      <div />
+      <div>
+        <h4>
+          You are about to send the following message to
+          {` ${numRecipients}`}
+          {numRecipients === 1 ? ' person' : ' people'}
+          .
+        </h4>
+        <table className="table">
+          <tr>
+            <th scope="row">Subject</th>
+            <td>{subject}</td>
+          </tr>
+          <tr>
+            <th scope="row">Body</th>
+            <td>{defaultBody}</td>
+          </tr>
+        </table>
+      </div>
     );
 
     const loadingView = (
@@ -68,7 +87,10 @@ class MessageStudentsModal extends Component {
     );
 
     const failureView = (
-      <div />
+      <div>
+        We encountered a problem while sending the message.
+        Please try again later or contact an admin if the problem persists.
+      </div>
     );
 
     let body;
