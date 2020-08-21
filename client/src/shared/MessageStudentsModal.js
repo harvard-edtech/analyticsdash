@@ -68,14 +68,18 @@ class MessageStudentsModal extends Component {
           {numRecipients === 1 ? ' person' : ' people'}
           :
         </h5>
-        <table className="table">
+        <table className="table table-sm table-bordered">
+          <colgroup>
+            <col span="1" style={{ width: '15%' }} />
+            <col span="1" style={{ width: '85%' }} />
+          </colgroup>
           <tbody>
             <tr>
-              <th scope="row">Subject:</th>
+              <th className="table-info" scope="row">Subject:</th>
               <td>{subject}</td>
             </tr>
             <tr>
-              <th scope="row">Body:</th>
+              <th className="table-info" scope="row">Body:</th>
               <td>{defaultBody}</td>
             </tr>
           </tbody>
