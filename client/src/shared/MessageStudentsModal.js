@@ -26,8 +26,13 @@ class MessageStudentsModal extends Component {
   sendMessage() {
     this.setState({ state: STATES.LOADING });
     try {
-      // Send message here
-      this.setState({ state: STATES.SUCCESS });
+      // TODO: Send message here through CACCL
+
+      // Set state with artificial delay for now
+      setTimeout(
+        () => { return this.setState({ state: STATES.SUCCESS }); },
+        2000
+      );
     } catch (err) {
       this.setState({ state: STATES.FAILURE });
     }
@@ -57,27 +62,32 @@ class MessageStudentsModal extends Component {
 
     const previewView = (
       <div>
-        <h4>
+        <h5 style={{ paddingBottom: '10px' }}>
           You are about to send the following message to
           {` ${numRecipients}`}
           {numRecipients === 1 ? ' person' : ' people'}
-          .
-        </h4>
+          :
+        </h5>
         <table className="table">
-          <tr>
-            <th scope="row">Subject</th>
-            <td>{subject}</td>
-          </tr>
-          <tr>
-            <th scope="row">Body</th>
-            <td>{defaultBody}</td>
-          </tr>
+          <tbody>
+            <tr>
+              <th scope="row">Subject:</th>
+              <td>{subject}</td>
+            </tr>
+            <tr>
+              <th scope="row">Body:</th>
+              <td>{defaultBody}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     );
 
     const loadingView = (
-      <LoadingSpinner />
+      <h5 style={{ textAlign: 'center' }}>
+        Sending Message...
+        <LoadingSpinner />
+      </h5>
     );
 
     const successView = (
