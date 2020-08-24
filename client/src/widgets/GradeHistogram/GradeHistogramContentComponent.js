@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 import BarChart from '../../shared/charts/BarChart';
+import MessageStudentsModal from '../../shared/MessageStudentsModal';
 
 // Import style
 import './GradeHistogramContentComponent.css';
