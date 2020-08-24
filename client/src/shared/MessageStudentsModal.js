@@ -177,9 +177,13 @@ class MessageStudentsModal extends Component {
 }
 
 MessageStudentsModal.propTypes = {
+  // Ids of the message recipients
   recipientIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  // Subject of the message
   subject: PropTypes.string.isRequired,
+  // Default body of the message (will be editable)
   defaultBody: PropTypes.string.isRequired,
+  // Function called when the modal is closed
   onClose: PropTypes.func,
 };
 
