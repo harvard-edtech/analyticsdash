@@ -69,6 +69,7 @@ class MessageStudentsModal extends Component {
           :
         </h5>
         <table className="table table-sm table-bordered">
+          <caption>Message info</caption>
           <colgroup>
             <col span="1" style={{ width: '15%' }} />
             <col span="1" style={{ width: '85%' }} />
