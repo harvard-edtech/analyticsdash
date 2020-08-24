@@ -2,9 +2,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+// Import caccl
+import initCACCL from 'caccl/client/cached';
+
 // Import shared components
 import Modal from './Modal';
 import LoadingSpinner from './LoadingSpinner';
+
+// Get course data
+import getCanvasData from '../helpers/getCanvasData';
 
 // Constants
 const STATES = {
@@ -13,6 +19,9 @@ const STATES = {
   SUCCESS: 'message-success',
   FAILURE: 'message-failure',
 };
+
+// Initialize caccl
+const { api } = initCACCL();
 
 class MessageStudentsModal extends Component {
   constructor(props) {
@@ -23,16 +32,25 @@ class MessageStudentsModal extends Component {
     };
   }
 
-  sendMessage() {
-    this.setState({ state: STATES.LOADING });
-    try {
-      // TODO: Send message here through CACCL
+  async sendMessage() {
+    const {
+      recipientIds,
+      subject,
+      defaultBody,
+    } = this.props;
 
-      // Set state with artificial delay for now
-      setTimeout(
-        () => { return this.setState({ state: STATES.SUCCESS }); },
-        2000
-      );
+    this.setState({ state: STATES.LOADING });
+    const canvasData = getCanvasData();
+    const courseId = canvasData.getCourseId();
+
+    try {
+      await api.conversation.create({
+        recipientIds,
+        subject,
+        courseId,
+        body: defaultBody,
+      });
+      this.setState({ state: STATES.SUCCESS });
     } catch (err) {
       this.setState({ state: STATES.FAILURE });
     }
