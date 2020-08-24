@@ -149,11 +149,6 @@ class GradeHistogramContentComponent extends Component {
       <div>
         {assignmentDropdown}
         {body}
-        <MessageStudentsModal
-          recipientIds={[123456]}
-          subject="Hi"
-          defaultBody="Hello there"
-        />
       </div>
     );
   }

@@ -27,8 +27,11 @@ class MessageStudentsModal extends Component {
   constructor(props) {
     super(props);
 
+    const { defaultBody } = this.props;
+
     this.state = {
       state: STATES.PREVIEW,
+      messageBody: defaultBody,
     };
   }
 
@@ -36,8 +39,11 @@ class MessageStudentsModal extends Component {
     const {
       recipientIds,
       subject,
-      defaultBody,
     } = this.props;
+
+    const {
+      messageBody
+    } = this.state;
 
     this.setState({ state: STATES.LOADING });
     const canvasData = getCanvasData();
@@ -48,7 +54,7 @@ class MessageStudentsModal extends Component {
         recipientIds,
         subject,
         courseId,
-        body: defaultBody,
+        body: messageBody,
       });
       this.setState({ state: STATES.SUCCESS });
     } catch (err) {
@@ -59,12 +65,12 @@ class MessageStudentsModal extends Component {
   render() {
     const {
       state,
+      messageBody,
     } = this.state;
 
     const {
       recipientIds,
       subject,
-      defaultBody,
       onClose,
     } = this.props;
 
@@ -99,7 +105,18 @@ class MessageStudentsModal extends Component {
             </tr>
             <tr>
               <th className="table-info" scope="row">Body:</th>
-              <td>{defaultBody}</td>
+              <td>
+                <form>
+                  <input
+                    type="text"
+                    style={{ width: '100%' }}
+                    value={messageBody}
+                    onChange={(event) => {
+                      this.setState({ messageBody: event.target.value });
+                    }}
+                  />
+                </form>
+              </td>
             </tr>
           </tbody>
         </table>
