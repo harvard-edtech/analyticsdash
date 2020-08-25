@@ -4,7 +4,6 @@
   cursor: pointer;
   background: transparent;
   border:none;
-  float: right;
 }
 
 /* Increase opacity on hover */
@@ -55,6 +54,8 @@
 /* Tooltip text */
 .Tooltip-text {
   padding: 5px;
+  font-weight: normal;
+  font-size: medium;
 }
 
 /* Custom transparent theme */
