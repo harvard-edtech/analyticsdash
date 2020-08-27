@@ -34,6 +34,7 @@ export default PropTypes.shape({
   // - onOpenConfiguration() [function]
   // - onOpenHelp() [function]
   // - onChangeConfiguration(newConfiguration) [function]
+  // - setActions(newActions) [function]
   ContentComponent: Comp.isRequired,
 
   // View (component) for configuration

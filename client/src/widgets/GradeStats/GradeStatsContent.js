@@ -5,6 +5,7 @@
 
 // Import React
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // Import caccl
 import initCACCL from 'caccl/client/cached';
@@ -18,6 +19,7 @@ import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 import Modal from '../../shared/Modal';
 import CopyButton from '../../shared/CopyButton';
+import Tooltip from '../../shared/Tooltip';
 
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
@@ -62,6 +64,10 @@ class GradeStatsContent extends Component {
    * @author Gabe Abrams
    */
   render() {
+    const {
+      setActions,
+      onOpenHelp,
+    } = this.props;
     const {
       assignment,
       state,
@@ -111,9 +117,11 @@ class GradeStatsContent extends Component {
             <strong>
               Statistics:
             </strong>
-            <span style={{ fontWeight: 300 }}>
-              &nbsp;(stats based only on nonzero scores)
-            </span>
+            {' '}
+            <Tooltip
+              text="stats based only on nonzero scores"
+              onOpenHelp={onOpenHelp}
+            />
           </div>
 
           {/* Stat Group */}
@@ -172,34 +180,35 @@ class GradeStatsContent extends Component {
               </div>
             </li>
           </div>
-
-          {/* Announcement */}
-          <div className="text-center mt-2">
-            <button
-              type="button"
-              className="btn btn-light border mr-2"
-              aria-label="send grade stats announcement to students"
-              onClick={() => {
-                this.setState({
-                  state: STATES.ANNOUNCEMENT_PREVIEW,
-                });
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faBullhorn}
-                className="mr-2"
-              />
-              Post Stats Announcement
-            </button>
-            <CopyButton
-              item="Announcement Text"
-              text={announcementMessage}
-              variant="light border"
-            />
-          </div>
         </div>
       );
     }
+
+    /* --------------------------- Actions -------------------------- */
+
+    const actions = [
+      {
+        key: 'send-grade-stats-announcement',
+        id: 'GradeStatsContent-send-grade-stats-announcement',
+        label: (
+          <span>
+            <FontAwesomeIcon
+              icon={faBullhorn}
+              className="mr-2"
+            />
+            Post Stats Announcement
+          </span>
+        ),
+        description: 'send grade stats announcement to students',
+        onClick: () => {
+          this.setState({
+            state: STATES.ANNOUNCEMENT_PREVIEW,
+          });
+        },
+      },
+    ];
+
+    setActions(actions);
 
     /* ---------------------------- Modal --------------------------- */
 
@@ -309,5 +318,15 @@ class GradeStatsContent extends Component {
     );
   }
 }
+
+GradeStatsContent.propTypes = {
+  /**
+   * Handler for setting the list of actions in the action bar
+   * @param {Action[]} actions - list of actions
+   */
+  setActions: PropTypes.func.isRequired,
+  // Handler to call when user wants to open help
+  onOpenHelp: PropTypes.func.isRequired,
+};
 
 export default GradeStatsContent;

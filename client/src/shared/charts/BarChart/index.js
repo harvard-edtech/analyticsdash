@@ -14,7 +14,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import ChartContainer from '../../ChartContainer';
 
 // Import themes
-import genDefs from '../style/genDefs';
+import genDefs from '../STYLE/genDefs';
 
 // Import constants
 import CONSTANTS from './CONSTANTS';

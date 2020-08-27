@@ -8,14 +8,12 @@
   height: 40px;
   width: 100%;
   padding-top: 10px;
-  font-size: 1.5vw;
 }
 
 .ChartContainer-contents {
   position: relative;
   overflow-y: visible;
   width: 100%;
-  padding: 10px;
 }
 
 .ChartContainer-download-button {

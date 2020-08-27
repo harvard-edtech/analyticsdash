@@ -1,0 +1,65 @@
+/* Hoverable tooltip circle */
+.Tooltip-circle {
+  opacity: 0.85;
+  cursor: pointer;
+  background: transparent;
+  border:none;
+}
+
+/* Increase opacity on hover */
+.Tooltip-circle:hover {
+  opacity: 1;
+}
+
+/* remove outline on focus */
+.Tooltip-circle:focus {
+  outline: none;
+}
+
+/* Container for hidden tooltip div */
+.Tooltip-container {
+  background: #f5f5f5;
+  box-sizing: border-box;
+  border-radius: 6px;
+  text-align: center;
+  width: max-content;
+  min-width: 10vw;
+  max-width: 30vw;
+  border-width: 1px;
+  box-shadow: 1px 1px lightgray;
+}
+
+/* Tooltip help bar */
+.Tooltip-help-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  font-weight: bold;
+  font-size: 13px;
+  color: white;
+  vertical-align: middle;
+  padding: 2px 0 2px 5px;
+  border-radius: 4px 4px 2px 2px;
+}
+
+/* Button linked to onOpenHelp function */
+.Tooltip-help-button {
+  margin-left: 5px;
+  margin-right: 1px;
+  border-radius: 4px;
+  font-size: 12px !important;
+  border-style: solid;
+}
+
+/* Tooltip text */
+.Tooltip-text {
+  padding: 5px;
+  font-weight: normal;
+  font-size: medium;
+}
+
+/* Custom transparent theme */
+.tippy-box[data-theme~='transparent'] {
+  background: transparent;
+  background-color: transparent;
+}
