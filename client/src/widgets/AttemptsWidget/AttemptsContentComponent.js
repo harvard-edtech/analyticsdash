@@ -14,7 +14,7 @@ import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
 
 // Import colors
-import COLORS from '../../shared/charts/STYLE/COLORS';
+import COLORS from '../../shared/charts/style/COLORS';
 
 // Get data
 import getCanvasData from '../../helpers/getCanvasData';
@@ -104,13 +104,16 @@ class AttemptsContentComponent extends Component {
         if (attempt >= data.length) {
           data[data.length - 1].value += 1;
           // Decrement no submissions bucket
-          data[0].value -= 1;
+          data[0].values['No Submissions'] -= 1;
           return;
         }
-        data[attempt].value += 1;
-        // Decrement no submissions bucket
-        // If attempt is 0, it cancels out
-        data[0].value -= 1;
+
+        if (attempt !== 0) {
+          // Add attempt to respective bucket
+          data[attempt].value += 1;
+          // Decrement no submissions bucket
+          data[0].values['No Submissions'] -= 1;
+        }
       });
     }
 
