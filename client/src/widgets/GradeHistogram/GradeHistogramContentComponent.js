@@ -74,10 +74,10 @@ class GradeHistogramContentComponent extends Component {
       // Look up assignment submissions
       const subs = canvasData.listSubmissions(assignment.id);
       // Assignment has no points
-      if (assignment.points_possible === 0) {
+      if (!assignment.points_possible || assignment.points_possible === 0) {
         body = (
           <div>
-            This assignment had no points available.
+            This assignment is not graded.
           </div>
         );
       } else if (subs.length === 0) {
