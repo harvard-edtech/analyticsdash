@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import { ResponsivePie } from '@nivo/pie';
 
 // Import color definitions
-import genDefs from './STYLE/genDefs';
+import genDefs from './style/genDefs';
 
 // Import shared component
 import ChartContainer from '../ChartContainer';
