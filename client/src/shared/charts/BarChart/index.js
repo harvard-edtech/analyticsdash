@@ -317,8 +317,8 @@ class BarChart extends Component {
       legendPosition: 'middle',
     };
 
-    // Dynamically set marginBottom to be 10px below the bottom tick legend
-    margin.bottom = axisBottom.legendOffset + 10;
+    // Dynamically set marginBottom to be 15px below the bottom tick legend
+    margin.bottom = axisBottom.legendOffset + 15;
 
     /* ------------------------- Orientation ------------------------ */
 
