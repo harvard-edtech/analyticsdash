@@ -38,7 +38,6 @@ class GradeHistogramContentComponent extends Component {
 
     const {
       configuration,
-      setActions,
     } = this.props;
 
     const {
@@ -83,7 +82,7 @@ class GradeHistogramContentComponent extends Component {
       } else if (subs.length === 0) {
         body = (
           <div>
-            This assignment has no graded submissions.
+            This assignment has no submissions.
           </div>
         );
       } else {
