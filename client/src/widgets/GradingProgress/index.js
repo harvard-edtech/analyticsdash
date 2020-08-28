@@ -15,7 +15,7 @@ export default {
   HelpComponent,
 
   requirements: [
-    // REQUIREMENTS.AT_LEAST_ONE_SUBMITTED_ASSIGNMENT,
+    REQUIREMENTS.AT_LEAST_ONE_SUBMITTED_ASSIGNMENT,
   ],
 
   metadata: {

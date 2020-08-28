@@ -10,18 +10,18 @@ import PropTypes from 'prop-types';
 // Import shared components
 import AssignmentsDropdown from '../../shared/AssignmentsDropdown';
 import LoadingSpinner from '../../shared/LoadingSpinner';
+import ProgressBar from '../../shared/ProgressBar';
+import ProgressBarContainer from '../../shared/ProgressBarContainer';
 import MessageStudentsModal from '../../shared/MessageStudentsModal';
-import Tooltip from '../../shared/Tooltip';
-import CSVDownloadButton from '../../shared/CSVDownloadButton';
 
-// Get data
+// Import canvas data
 import getCanvasData from '../../helpers/getCanvasData';
 
 // Constants
 const STATES = {
   MAIN: 'main-view',
   SEND_MESSAGE: 'send-message-view',
-}
+};
 
 /* ---------------------------- Class --------------------------- */
 
@@ -32,8 +32,6 @@ class GradingProgressContent extends Component {
     this.state = {
       // Currently viewed assignment
       assignment: null,
-      // Rubric view expanded
-      expanded: false,
       // Current widget view
       state: STATES.MAIN,
     };
@@ -42,7 +40,6 @@ class GradingProgressContent extends Component {
   render() {
     const {
       assignment,
-      expanded,
       state,
     } = this.state;
 
@@ -96,104 +93,118 @@ class GradingProgressContent extends Component {
         /* ------------------ Main Progress Bar ---------------------- */
 
         const overallProgressBar = (
-          <div className="progress mt-1">
-            <div
-              aria-label="Grading progress"
-              className="progress-bar bg-info"
-              role="progressbar"
-              style={{ width: `${percentGraded}%` }}
-              aria-valuenow={percentGraded}
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              {percentGraded.toFixed(0)}
-              %
-            </div>
-          </div>
+          <ProgressBar
+            ariaLabel="Overall grading progress"
+            percentProgress={percentGraded}
+          />
         );
 
         // Student-by-student grading data for CSV download button
         const gradingProgressData = [{ todo: 'TODO' }];
 
-        /* ---------------------- Rubric View ------------------------ */
-
-        const expandRubricButton = (
-          !expanded
-            ? (
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => {
-                  this.setState({
-                    expanded: true,
-                  });
-                }}
-              >
-                Rubric View
-              </button>
-            )
-            : (
-              <button
-                type="button"
-                className="btn btn-sm btn-secondary"
-                onClick={() => {
-                  this.setState({
-                    expanded: false,
-                  });
-                }}
-              >
-                Hide Rubric View
-              </button>
-            )
+        const overallView = (
+          <ProgressBarContainer
+            title="Grading Progress"
+            progressBars={[overallProgressBar]}
+            tooltipProps={{
+              text: 'Displays the percentage of all submissions that have been given a grade.',
+              onOpenHelp,
+            }}
+            csvDownloadProps={{
+              filename: `${assignment.name} grading progress`,
+              headerMap: { todo: 'TODO' },
+              data: gradingProgressData,
+              id: 'rubric-grading-progress-download-button',
+            }}
+          />
         );
 
+        /* ---------------------- Rubric View ------------------------ */
+        let rubricBars;
+
+        if (assignment.rubric) {
+          // Create map of rubric criteria -> number of submissions with a grade
+          const rubricProgressMap = {};
+          assignment.rubric.forEach((criterion) => {
+            rubricProgressMap[criterion.id] = {
+              value: 0,
+              description: criterion.description,
+            };
+          });
+
+          // Populate rubric progress map by checking each submission
+          subs.forEach((sub) => {
+            sub.rubricAssessments.forEach((assessment) => {
+              assessment.assessmentRatings.forEach((rating) => {
+                if (rating.points !== null) {
+                  rubricProgressMap[rating.criterionId].value += 1;
+                }
+              });
+            });
+          });
+
+          // Use progress map to define a progress bar for each criterion
+          rubricBars = Object.values(rubricProgressMap).map(
+            ({ value, description }) => {
+              const progress = ((1 - (value / subs.length)) * 100);
+
+              return (
+                <ProgressBar
+                  key={`${description}-progress-bar`}
+                  title={description}
+                  ariaLabel={`${description} progress`}
+                  percentProgress={progress}
+                />
+              );
+            }
+          );
+        }
+
         const rubricView = (
-          expanded
+          assignment.rubric
             ? (
-              <div className="text-left" style={{ width: '80%' }}>
-                <div className="d-flex justify-content-between">
-                  <div>
-                    <h5 className="d-inline-block">
-                      Rubric Grading Progress
-                    </h5>
-                    <Tooltip
-                      text="For each rubric item, displays the percentage of all submissions that have a grade."
-                      onOpenHelp={onOpenHelp}
-                    />
-                  </div>
-                  <CSVDownloadButton
-                    filename={`${assignment.name} rubric grading progress`}
-                    headerMap={{ todo: 'TODO' }}
-                    data={gradingProgressData}
-                    id="rubric-grading-progress-download-button"
-                  />
-                </div>
-                <div className="progress mt-1">
-                  <div
-                    aria-label="Grading progress"
-                    className="progress-bar bg-info"
-                    role="progressbar"
-                    style={{ width: `${percentGraded}%` }}
-                    aria-valuenow={percentGraded}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  >
-                    {percentGraded.toFixed(0)}
-                    %
-                  </div>
-                </div>
-              </div>
+              <ProgressBarContainer
+                title="Rubric Grading Progress"
+                progressBars={rubricBars}
+                tooltipProps={{
+                  text: 'For each rubric item, displays the percentage of all submissions that have a grade.',
+                  onOpenHelp,
+                }}
+                csvDownloadProps={{
+                  filename: `${assignment.name} rubric grading progress`,
+                  headerMap: { todo: 'TODO' },
+                  data: gradingProgressData,
+                  id: 'rubric-grading-progress-download-button',
+                }}
+              />
             )
             : null
         );
 
         /* ---------------------- Action Modals ---------------------- */
 
+        const graderIds = canvasData.listTTMs().map((user) => {
+          return user.Id;
+        });
+
+        const sendMessageModal = (
+          (state === STATES.SEND_MESSAGE)
+            ? (
+              <MessageStudentsModal
+                recipientIds={graderIds}
+                subject={`Grading progress on ${assignment.name}`}
+                defaultBody={`Hi! Please check Canvas for ungraded submissions for the ${assignment.name} assignment.`}
+                onClose={() => { this.setState({ state: STATES.MAIN }); }}
+              />
+            )
+            : null
+        );
+
         setActions([
           {
             key: 'message-graders-action',
             id: 'message-graders-action',
-            label: 'Message all graders',
+            label: 'Message all teaching team members',
             description: 'Send an editable message to all course graders',
             onClick: () => { this.setState({ state: STATES.SEND_MESSAGE }); },
           },
@@ -211,41 +222,15 @@ class GradingProgressContent extends Component {
         body = (
           <div>
             {/* Main grading progress bar */}
-            <div className="d-flex justify-content-between my-2">
-              {/* Progress bar title and annotations */}
-              <div className="text-left" style={{ width: '80%' }}>
-                <div className="d-flex justify-content-between">
-                  <div>
-                    <h5 className="d-inline-block">
-                      Grading Progress
-                    </h5>
-                    <Tooltip
-                      text="Displays the percentage of all submissions that have been given a final grade."
-                      onOpenHelp={onOpenHelp}
-                    />
-                  </div>
-                  <CSVDownloadButton
-                    filename={`${assignment.name} grading progress`}
-                    headerMap={{ todo: 'TODO' }}
-                    data={gradingProgressData}
-                    id="grading-progress-download-button"
-                  />
-                </div>
-                {overallProgressBar}
-              </div>
-              {/* Expand rubric button if not expanded */}
-              <div className="d-flex align-items-center justify-content-around">
-                {expandRubricButton}
-              </div>
-            </div>
-            <div>
-              {rubricView}
-            </div>
+            {overallView}
+            {/* Detailed rubric progress bars */}
+            {rubricView}
+            {/* Action modal */}
+            {sendMessageModal}
           </div>
         );
       }
     }
-
 
     return (
       <div>
