@@ -42,7 +42,7 @@ class MessageStudentsModal extends Component {
     } = this.props;
 
     const {
-      messageBody
+      messageBody,
     } = this.state;
 
     this.setState({ state: STATES.LOADING });

@@ -1,6 +1,7 @@
 import GradeStats from './GradeStats';
 import AttemptsWidget from './AttemptsWidget';
 import GradeHistogram from './GradeHistogram';
+import GradingProgress from './GradingProgress';
 
 // Import helpers
 import preprocessWidget from '../helpers/preprocessWidget';
@@ -10,6 +11,7 @@ const widgetList = [
   GradeStats,
   AttemptsWidget,
   GradeHistogram,
+  GradingProgress,
 ];
 
 // Convert to map
