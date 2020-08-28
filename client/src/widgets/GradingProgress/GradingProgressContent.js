@@ -100,7 +100,13 @@ class GradingProgressContent extends Component {
         );
 
         // Student-by-student grading data for CSV download button
-        const gradingProgressData = [{ todo: 'TODO' }];
+        const gradingProgressData = subs.map((submission) => {
+          const submitter = canvasData.getUser(submission.submitterId);
+          return ({
+            student: submitter.name,
+            graded: (submission.gradedAt ? 'Yes' : 'No'),
+          });
+        });
 
         const overallView = (
           <ProgressBarContainer
@@ -112,7 +118,10 @@ class GradingProgressContent extends Component {
             }}
             csvDownloadProps={{
               filename: `${assignment.name} grading progress`,
-              headerMap: { todo: 'TODO' },
+              headerMap: {
+                student: 'Student',
+                graded: 'Graded?',
+              },
               data: gradingProgressData,
               id: 'rubric-grading-progress-download-button',
             }}
