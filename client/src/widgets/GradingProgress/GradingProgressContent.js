@@ -129,27 +129,56 @@ class GradingProgressContent extends Component {
         );
 
         /* ---------------------- Rubric View ------------------------ */
+        // Rubric progress bars
         let rubricBars;
+
+        // Create detailed student grading data for CSV Download
+        const rubricCSVDownloadData = [];
+        const rubricCSVDownloadHeaderMap = {
+          student: 'Student',
+        };
 
         if (assignment.rubric) {
           // Create map of rubric criteria -> number of submissions with a grade
           const rubricProgressMap = {};
           assignment.rubric.forEach((criterion) => {
+            // Populate bar data map
             rubricProgressMap[criterion.id] = {
               value: 0,
               description: criterion.description,
             };
+
+            // Populate header map
+            rubricCSVDownloadHeaderMap[criterion.id] = criterion.description;
           });
 
-          // Populate rubric progress map by checking each submission
+          // Populate data objects by checking each submission
           subs.forEach((sub) => {
+            const csvDownloadDatum = {
+              student: canvasData.getUser(sub.submitterId).name,
+            };
+
+            // Set all rubric graded fields to No
+            Object.keys(rubricCSVDownloadHeaderMap).forEach((key) => {
+              if (key === 'student') {
+                return;
+              }
+
+              csvDownloadDatum[key] = 'No';
+            });
+
             sub.rubricAssessments.forEach((assessment) => {
               assessment.assessmentRatings.forEach((rating) => {
                 if (rating.points !== null) {
+                  // Update data fields if criterion is graded
                   rubricProgressMap[rating.criterionId].value += 1;
+                  csvDownloadDatum[rating.criterionId] = 'Yes';
                 }
               });
             });
+
+            // Add student data
+            rubricCSVDownloadData.push(csvDownloadDatum);
           });
 
           // Use progress map to define a progress bar for each criterion
@@ -169,6 +198,7 @@ class GradingProgressContent extends Component {
           );
         }
 
+        // Define full rubric view
         const rubricView = (
           assignment.rubric
             ? (
@@ -181,8 +211,8 @@ class GradingProgressContent extends Component {
                 }}
                 csvDownloadProps={{
                   filename: `${assignment.name} rubric grading progress`,
-                  headerMap: { todo: 'TODO' },
-                  data: gradingProgressData,
+                  headerMap: rubricCSVDownloadHeaderMap,
+                  data: rubricCSVDownloadData,
                   id: 'rubric-grading-progress-download-button',
                 }}
               />
