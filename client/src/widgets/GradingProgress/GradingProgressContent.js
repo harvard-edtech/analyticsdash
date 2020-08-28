@@ -213,7 +213,11 @@ class GradingProgressContent extends Component {
             id: 'open-speedgrader-action',
             label: 'Open assignment in SpeedGrader',
             description: 'Open this assignment in the Canvas SpeedGrader',
-            onClick: () => {},
+            onClick: () => {
+              window.open(
+                `https://canvas.harvard.edu/courses/${canvasData.getCourseId()}/gradebook/speed_grader?assignment_id=${assignment.id}`
+              );
+            },
           },
         ]);
 
