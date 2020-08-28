@@ -20,7 +20,7 @@ class ProgressBar extends Component {
     const titleBar = (
       title
         ? (
-          <h6 className="d-inline-flex justify-content-start align-items-center mb-0 mr-1 ProgressBar-title">
+          <h6 className="d-inline text-left mb-0 mr-1 ProgressBar-title">
             {title}
           </h6>
         )
@@ -28,7 +28,7 @@ class ProgressBar extends Component {
     );
 
     return (
-      <div className="d-flex my-2 ProgressBar-outer">
+      <div className="d-flex justify-content-start my-2 ProgressBar-outer">
         {titleBar}
         <div className="progress ProgressBar-bar">
           <div
