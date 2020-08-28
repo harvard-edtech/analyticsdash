@@ -1,0 +1,12 @@
+.ProgressBar-outer {
+  width: 85%;
+}
+
+.ProgressBar-bar {
+  height: 30px !important;
+  width: 100%;
+}
+
+.ProgressBar-title {
+  width: 20%;
+}
