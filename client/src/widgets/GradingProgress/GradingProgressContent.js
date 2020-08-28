@@ -146,7 +146,7 @@ class GradingProgressContent extends Component {
           // Use progress map to define a progress bar for each criterion
           rubricBars = Object.values(rubricProgressMap).map(
             ({ value, description }) => {
-              const progress = ((1 - (value / subs.length)) * 100);
+              const progress = ((value / subs.length) * 100);
 
               return (
                 <ProgressBar
