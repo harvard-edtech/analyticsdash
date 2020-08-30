@@ -17,9 +17,6 @@ import genDefs from './style/genDefs';
 // Import shared component
 import ChartContainer from '../ChartContainer';
 
-// Import style
-import './PieChart.css';
-
 // Style constants for nivo chart props
 const PAD_ANGLE_DEGREES = 0.5;
 const CORNER_RADIUS_PX = 2;
