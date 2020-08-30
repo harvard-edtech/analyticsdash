@@ -71,7 +71,6 @@ class Tooltip extends Component {
           content={tooltipContentElement}
           interactive
           allowHTML
-          distance={5}
           interactiveBorder={5}
           hideOnClick={false}
         >
