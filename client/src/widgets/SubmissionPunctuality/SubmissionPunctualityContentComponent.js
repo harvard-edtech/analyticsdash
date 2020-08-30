@@ -125,7 +125,7 @@ class SubmissionPunctualityContentComponent extends Component {
      * @param {number} rowNum - current row index
      * @returns{node} formatted table row div
      */
-    const getTableRow = (student, rowNum) => {
+    const generateTableRow = (student, rowNum) => {
       return (
         <tr>
           <th scope="row">{rowNum}</th>
@@ -186,8 +186,7 @@ class SubmissionPunctualityContentComponent extends Component {
         let anchorDate;
 
         // Get assignment due date
-        // const dueDate = assignment.due_at;
-        const dueDate = new Date('Aug 28 2020 7:00:00');
+        const dueDate = assignment.due_at;
 
         if (dueDate) {
           // if dueDate present, use it as the anchor
@@ -401,7 +400,7 @@ class SubmissionPunctualityContentComponent extends Component {
                         {
                           // Dynamically get table rows
                           submitters.map((student, index) => {
-                            return getTableRow(student, index + 1);
+                            return generateTableRow(student, index + 1);
                           })
                         }
 
@@ -421,11 +420,10 @@ class SubmissionPunctualityContentComponent extends Component {
         /* ----------------------- Create Body----------------------- */
         body = (
           <div style={{ padding: '10px' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex' }}>
               <div style={{ width: '70%' }}>
                 <h5>
                   Submission Heatmap:
-                  {' '}
                   <Tooltip
                     text="When people submitted their final submission. Taller bars mean more people submitted at that time."
                     onOpenHelp={onOpenHelp}
@@ -453,7 +451,12 @@ class SubmissionPunctualityContentComponent extends Component {
                   hideTitle
                 />
               </div>
-              <div style={{ width: '30%', minWidth: '200px', height: '350 px' }}>
+              <div style={{
+                width: '30%',
+                minWidth: '200px',
+                height: '350 px',
+              }}
+              >
                 <h5>
                   Submission Status:
                 </h5>
