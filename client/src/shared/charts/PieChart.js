@@ -47,6 +47,7 @@ class PieChart extends Component {
       showSegmentLabels,
       showLegend,
       tooltipFormatter,
+      height,
     } = this.props;
 
     // Ensure chartTitle is defined in case of propTypes failure
@@ -116,7 +117,11 @@ class PieChart extends Component {
           id: `${csvFilename}-download-button`,
         }}
       >
-        <div className="PieChart-body-container">
+        <div style={{
+          height: `${height}px`,
+          maxHeight: '100%',
+        }}
+        >
           <ResponsivePie
             /* Data */
             data={chartData}
@@ -175,6 +180,8 @@ PieChart.propTypes = {
    * @return {node} valid html element
    */
   tooltipFormatter: PropTypes.func,
+  // Height of the chart
+  height: PropTypes.number,
 };
 
 PieChart.defaultProps = {
@@ -190,6 +197,8 @@ PieChart.defaultProps = {
   showLegend: false,
   // No tooltip formatter
   tooltipFormatter: undefined,
+  // Default chart height
+  height: 500,
 };
 
 export default PieChart;
