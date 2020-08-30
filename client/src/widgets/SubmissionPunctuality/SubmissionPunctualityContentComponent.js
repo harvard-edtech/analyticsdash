@@ -471,7 +471,7 @@ class SubmissionPunctualityContentComponent extends Component {
                     [SUBMISSION.SUBMITTED]: COLORS.BLUE,
                     'No Sub': COLORS.GRAY,
                   }}
-                  height={350}
+                  height={310}
                 />
                 {detailedViewBtn}
               </div>
